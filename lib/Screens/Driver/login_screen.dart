@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Driver/login_controller.dart';
+import 'package:om/utils.dart';
 
 class LoginScreen extends StatelessWidget {
   final LoginController controller = Get.put(LoginController());
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,29 +59,9 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Obx(() => controller.isLoading.value
                   ? const CircularProgressIndicator()
-                  : submitButton()),
+                  : submitButton(text: 'Login', onPressed: controller.login)),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget submitButton() {
-    return GestureDetector(
-      onTap: controller.login,
-      child: Container(
-        alignment: Alignment.center,
-        height: 50,
-        width: 150,
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Text(
-          'Login',
-          style: TextStyle(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
     );
