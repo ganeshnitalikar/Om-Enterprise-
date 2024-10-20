@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:om/Api%20Service/api_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:om/Services/api_service.dart';
+import 'package:om/Services/shared_preferences_service.dart';
 
 class LoginController extends GetxController {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   final APIService apiService = APIService();
 
   var isLoading = false.obs;
@@ -23,12 +24,12 @@ class LoginController extends GetxController {
 
     try {
       final response = await apiService.login(username, password);
+      print("here");
 
       if (response['statusCode'] == 200) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('username', response['result']['userName']);
-        await prefs.setInt('employeeId', response['result']['employeeId']);
-        await prefs.setString('token', response['result']['token']);
+        sharedPrefs.setToken(response['result']['token']);
+        sharedPrefs.setEmployeeId(response['result']['employeeId']);
+        sharedPrefs.setemployeeRole(response['result']['employeeRole']);
 
         if (response['result']['employeeRole'] == 'Driver') {
           Get.offNamed('/driverDashboard', arguments: {
@@ -36,7 +37,9 @@ class LoginController extends GetxController {
             'employeeId': response['result']['employeeId']
           });
         } else if (response['result']['employeeRole'] == 'Admin') {
-          Get.offNamed('/AdminDashboard', arguments: {
+
+          Get.offNamed('/adminDashboard', arguments: {
+
             'username': response['result']['userName'],
             'employeeId': response['result']['employeeId']
           });
