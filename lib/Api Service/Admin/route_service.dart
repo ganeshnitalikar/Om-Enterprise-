@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:om/Model/Admin/route_model.dart';
+import '../../Model/Admin/route_model.dart';
 
 class RouteService {
   final Dio _dio = Dio();

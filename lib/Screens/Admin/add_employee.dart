@@ -16,7 +16,9 @@ class AddEmployeeScreen extends StatelessWidget {
             // Dropdown to select Role
             Obx(() => DropdownButtonFormField<String>(
               hint: Text('Select Role'),
-              value: controller.selectedRole.value.isNotEmpty ? controller.selectedRole.value : null,
+              value: controller.selectedRole.value.isNotEmpty
+                  ? controller.selectedRole.value
+                  : null,
               onChanged: (value) {
                 controller.selectedRole.value = value ?? '';
               },
@@ -27,7 +29,7 @@ class AddEmployeeScreen extends StatelessWidget {
                 );
               }).toList(),
             )),
-            
+
             // Other input fields for employee details
             TextField(
               controller: controller.firstNameController,
@@ -45,14 +47,15 @@ class AddEmployeeScreen extends StatelessWidget {
             TextField(
               controller: controller.aadhaarNoController,
               decoration: InputDecoration(labelText: 'Aadhaar Number'),
+              keyboardType: TextInputType.number,
             ),
-            
+
             // Button to upload the photo
             ElevatedButton(
-              onPressed: () => controller.pickImage(),
+              onPressed: () => controller.pickImage(), // Using mobile image picker
               child: Text('Upload Photo'),
             ),
-            
+
             // Checkbox to mark the employee as active
             Obx(() => CheckboxListTile(
               title: Text('Active'),
@@ -61,7 +64,7 @@ class AddEmployeeScreen extends StatelessWidget {
                 controller.isActive.value = val ?? false;
               },
             )),
-            
+
             // Username and Password fields
             TextField(
               controller: controller.userNameController,
@@ -70,9 +73,9 @@ class AddEmployeeScreen extends StatelessWidget {
             TextField(
               controller: controller.passwordController,
               decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
+              obscureText: true, // Password field
             ),
-            
+
             // Save button
             SizedBox(height: 20),
             ElevatedButton(

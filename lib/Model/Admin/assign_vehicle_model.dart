@@ -1,23 +1,15 @@
-// assign_vehicle_model.dart
 class AssignVehicleModel {
-  final String employeeId;
-  final String vehicleId;
-  final String routeId;
-  final double materialAmount;
+  final int id;
+  final String label;
+  final String value; // Added value field
 
-  AssignVehicleModel({
-    required this.employeeId,
-    required this.vehicleId,
-    required this.routeId,
-    required this.materialAmount,
-  });
+  AssignVehicleModel({required this.id, required this.label, required this.value});
 
-  Map<String, dynamic> toJson() {
-    return {
-      'employeeId': employeeId,
-      'vehicleId': vehicleId,
-      'routeId': routeId,
-      'materialAmount': materialAmount,
-    };
+  factory AssignVehicleModel.fromJson(Map<String, dynamic> json) {
+    return AssignVehicleModel(
+      id: json['id'],
+      label: json['label'],
+      value: json['value'], // Added value field
+    );
   }
 }

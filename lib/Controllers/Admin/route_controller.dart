@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import 'package:om/Api%20Service/Admin/route_service.dart';
-import 'package:om/Model/Admin/route_model.dart';
+
+import '../../Api Service/Admin/route_service.dart';
+import '../../Model/Admin/route_model.dart';
 
 class RouteController extends GetxController {
   final RouteService _routeService = RouteService();

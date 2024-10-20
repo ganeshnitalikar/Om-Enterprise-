@@ -2,7 +2,8 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:dio/dio.dart';
-import 'package:om/Model/Admin/VehicleModel.dart';
+
+import '../../Model/Admin/VehicleModel.dart';
 
 class VehicleService {
   final Dio _dio = Dio();

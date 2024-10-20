@@ -1,78 +1,90 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:om/Api%20Service/Admin/assign_vehicle_service.dart';
+import 'package:om/Model/Admin/Vehicle.dart';
+import 'package:om/Model/Admin/assign_vehicle_model.dart';
+import 'package:om/Model/Admin/route.dart';
+import '../../Api Service/Admin/assign_vehicle_service.dart';
 
 class AssignVehicleController extends GetxController {
-  // Dropdown values
-  var employees = <DropdownMenuItem<int>>[].obs;
-  var vehicles = <DropdownMenuItem<int>>[].obs;
-  var routes = <DropdownMenuItem<int>>[].obs;
+  final AssignVehicleService service = AssignVehicleService(); // Create an instance of the service
+
+  var isLoadingEmployees = true.obs;
+  var isLoadingVehicles = true.obs;
+  var isLoadingRoutes = true.obs;
 
   var selectedEmployee = 0.obs;
   var selectedVehicle = 0.obs;
   var selectedRoute = 0.obs;
-
   var materialAmount = 0.0.obs;
-  var assignById = 2.obs; // Hardcoded for now, replace with dynamic ID if needed
 
-  final AssignVehicleService service = AssignVehicleService(); // Service instance
+  var employees = <AssignVehicleModel>[].obs; // Changed to use Employee model
+  var vehicles = <Vehicle>[].obs; // Changed to use Vehicle model
+  var routes = <Route>[].obs; // Changed to use Route model
 
   @override
   void onInit() {
-    super.onInit();
     fetchEmployees();
     fetchVehicles();
     fetchRoutes();
+    super.onInit();
   }
 
-  // Fetch employees from service
-  Future<void> fetchEmployees() async {
-    var data = await service.fetchEmployees();
-    employees.value = data.map<DropdownMenuItem<int>>((item) {
-      return DropdownMenuItem<int>(
-        value: item['id'],
-        child: Text(item['label']),
-      );
-    }).toList();
+  void fetchEmployees() async {
+    isLoadingEmployees(true);
+    try {
+      final response = await service.fetchEmployees();
+      if (response.isNotEmpty) {
+        employees.value = response.map((e) => AssignVehicleModel.fromJson(e as Map<String, dynamic>)).toList(); // Assuming Employee model has fromJson
+      }
+    } catch (error) {
+      print('Error fetching employees: $error'); // Handle the error
+    } finally {
+      isLoadingEmployees(false);
+    }
   }
 
-  // Fetch vehicles from service
-  Future<void> fetchVehicles() async {
-    var data = await service.fetchVehicles();
-    vehicles.value = data.map<DropdownMenuItem<int>>((item) {
-      return DropdownMenuItem<int>(
-        value: item['id'],
-        child: Text(item['label']),
-      );
-    }).toList();
+  void fetchVehicles() async {
+    isLoadingVehicles(true);
+    try {
+      final response = await service.fetchVehicles();
+      if (response.isNotEmpty) {
+        vehicles.value = response.map((v) => Vehicle.fromJson(v as Map<String, dynamic>)).toList(); // Assuming Vehicle model has fromJson
+      }
+    } catch (error) {
+      print('Error fetching vehicles: $error'); // Handle the error
+    } finally {
+      isLoadingVehicles(false);
+    }
   }
 
-  // Fetch routes from service
-  Future<void> fetchRoutes() async {
-    var data = await service.fetchRoutes();
-    routes.value = data.map<DropdownMenuItem<int>>((item) {
-      return DropdownMenuItem<int>(
-        value: item['id'],
-        child: Text(item['label']),
-      );
-    }).toList();
+  void fetchRoutes() async {
+    isLoadingRoutes(true);
+    try {
+      final response = await service.fetchRoutes();
+      if (response.isNotEmpty) {
+        routes.value = response.map((r) => Route.fromJson(r as Map<String, dynamic>)).toList(); // Assuming Route model has fromJson
+      }
+    } catch (error) {
+      print('Error fetching routes: $error'); // Handle the error
+    } finally {
+      isLoadingRoutes(false);
+    }
   }
 
-  // Assign vehicle using the service
-   Future<void> assignVehicle() async {
-    var data = {
-      'employeeId': {'id': selectedEmployee.value},
-      'vehicleId': {'id': selectedVehicle.value},
-      'routeId': {'id': selectedRoute.value},
+  void assignVehicle() async {
+    // Prepare data for assignment
+    final data = {
+      'employeeId': selectedEmployee.value,
+      'vehicleId': selectedVehicle.value,
+      'routeId': selectedRoute.value,
       'totalMaterial': materialAmount.value,
-      'assignById': {'id': assignById.value},
+      'assignById': 'your-assigner-id' // Provide this as per your requirements
     };
 
-    var result = await service.assignVehicle(data);
-    if (result) {
-      Get.snackbar('Success', 'Vehicle Assigned Successfully');
-    } else {
-      Get.snackbar('Error', 'Failed to Assign Vehicle');
+    try {
+      final result = await service.assignVehicle(data);
+      print('Vehicle assigned: $result'); // Handle the response as needed
+    } catch (error) {
+      print('Error assigning vehicle: $error'); // Handle the error
     }
   }
 }
