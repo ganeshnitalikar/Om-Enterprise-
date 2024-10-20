@@ -37,7 +37,9 @@ class LoginController extends GetxController {
             'employeeId': response['result']['employeeId']
           });
         } else if (response['result']['employeeRole'] == 'Admin') {
+
           Get.offNamed('/adminDashboard', arguments: {
+
             'username': response['result']['userName'],
             'employeeId': response['result']['employeeId']
           });
