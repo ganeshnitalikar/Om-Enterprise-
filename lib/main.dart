@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:om/Screens/Admin/admin_dashboard_screen.dart';
 import 'package:om/Screens/Driver/driver_dashboard_screen.dart';
 import 'package:om/Screens/Driver/login_screen.dart';
 import 'package:om/Screens/Driver/shop_sales_screen.dart';
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/driverDashboard', page: () => DriverDashboard()),
         GetPage(
             name: '/shopSales',
-            page: () => ShopSalesScreen()), // Example of another screen
+            page: () => ShopSalesScreen()),
+        GetPage(name: '/AdminDashboard', page: () => AdminDashboardScreen()),
       ],
     );
   }
