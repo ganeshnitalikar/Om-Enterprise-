@@ -23,8 +23,40 @@ class SharedPrefs {
     _sharedPrefs.setString('employeeRole', employeeRole);
   }
 
+  setUsername(String username) {
+    _sharedPrefs.setString('username', username);
+  }
+
+  setAssignId(int assignId) {
+    _sharedPrefs.setInt('assignId', assignId);
+  }
+
+  int getEmpId() {
+    return _sharedPrefs.getInt('employeeId') ?? 0;
+  }
+
+  int getAssignId() {
+    return _sharedPrefs.getInt('assignId') ?? 0;
+  }
+
+  String getusername() {
+    return _sharedPrefs.getString('username') ?? '';
+  }
+
   int getRouteId() {
     return _sharedPrefs.getInt('routeId') ?? 0;
+  }
+
+  String? getToken() {
+    return _sharedPrefs.getString('token');
+  }
+
+  String? getEmployeeRole() {
+    return _sharedPrefs.getString('employeeRole');
+  }
+
+  Future<void> clearPreferences() async {
+    await _sharedPrefs.clear();
   }
 }
 

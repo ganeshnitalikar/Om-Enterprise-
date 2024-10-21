@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:om/Services/shared_preferences_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class APIService {
@@ -97,7 +99,7 @@ class APIService {
   }
 
   void logout() async {
-    prefs = await getSharedPreferences();
-    prefs?.remove('token');
+    sharedPrefs.clearPreferences();
+    Get.offAllNamed('/');
   }
 }

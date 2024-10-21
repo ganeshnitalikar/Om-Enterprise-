@@ -7,7 +7,8 @@ import 'package:om/Screens/Admin/route_view.dart';
 import 'package:om/Screens/Admin/vehicle_view.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
-final AdminDashboardController _controller = Get.put(AdminDashboardController());
+  final AdminDashboardController _controller =
+      Get.put(AdminDashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ final AdminDashboardController _controller = Get.put(AdminDashboardController())
                         leading: Icon(Icons.person),
                         title: Text('Employee'),
                         onTap: () {
-                          Get.to(() => EmployeeScreen());
+                          Get.to(() => Placeholder());
                         },
                       ),
                       ListTile(
@@ -95,7 +96,7 @@ final AdminDashboardController _controller = Get.put(AdminDashboardController())
                     leading: Icon(Icons.directions_car_filled),
                     title: Text('Vehicle Assignment'),
                     onTap: () {
-                       Get.to(() => AssignVehicleScreen());
+                      Get.to(() => AssignVehicleScreen());
                     },
                   ),
                 ],

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Services/api_service.dart';
 import 'package:om/Controllers/Driver/driver_dashboard_controller.dart';
+import 'package:om/Services/shared_preferences_service.dart';
 
 class DriverDashboard extends StatelessWidget {
   final DriverDashboardController controller =
       Get.put(DriverDashboardController());
-  final String username = Get.arguments['username'];
-  final int employeeId = Get.arguments['employeeId'];
+  final String username = sharedPrefs.getusername();
 
   DriverDashboard({super.key});
 
@@ -68,7 +68,7 @@ class DriverDashboard extends StatelessWidget {
               title: const Text('Logout'),
               onTap: () {
                 APIService().logout();
-                Get.offAllNamed('/');
+                Get.offAllNamed('/login');
               },
             ),
           ],
