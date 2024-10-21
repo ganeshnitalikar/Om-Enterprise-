@@ -15,6 +15,8 @@ class AdminDashboardScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Dashboard'),
+        backgroundColor: Colors.blueAccent,
+        elevation: 0,
       ),
       drawer: _buildDrawer(context),
       body: Obx(() {
@@ -25,7 +27,7 @@ class AdminDashboardScreen extends StatelessWidget {
         return Center(
           child: Text(
             'Welcome to Admin Dashboard',
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blueAccent),
           ),
         );
       }),
@@ -40,13 +42,14 @@ class AdminDashboardScreen extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.blueAccent,
             ),
             child: Text(
               'Admin Menu',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -57,33 +60,33 @@ class AdminDashboardScreen extends StatelessWidget {
                 children: [
                   // Masters section with sub-menu
                   ExpansionTile(
-                    title: Text('Masters'),
-                    leading: Icon(Icons.settings),
+                    title: Text('Masters', style: TextStyle(fontWeight: FontWeight.bold)),
+                    leading: Icon(Icons.settings, color: Colors.blueAccent),
                     children: <Widget>[
                       ListTile(
-                        leading: Icon(Icons.person),
-                        title: Text('Employee'),
+                        leading: Icon(Icons.person, color: Colors.greenAccent),
+                        title: Text('Employee', style: TextStyle(fontSize: 16)),
                         onTap: () {
                           Get.to(() => EmployeeScreen());
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.map),
-                        title: Text('Route'),
+                        leading: Icon(Icons.map, color: Colors.orangeAccent),
+                        title: Text('Route', style: TextStyle(fontSize: 16)),
                         onTap: () {
                           Get.to(() => RouteView());
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.store),
-                        title: Text('Shop'),
+                        leading: Icon(Icons.store, color: Colors.purpleAccent),
+                        title: Text('Shop', style: TextStyle(fontSize: 16)),
                         onTap: () {
                           Get.to(ShopScreen());
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.directions_car),
-                        title: Text('Vehicle'),
+                        leading: Icon(Icons.directions_car, color: Colors.redAccent),
+                        title: Text('Vehicle', style: TextStyle(fontSize: 16)),
                         onTap: () {
                           Get.to(() => VehicleView());
                         },
@@ -92,8 +95,8 @@ class AdminDashboardScreen extends StatelessWidget {
                   ),
                   // Vehicle Assignment section
                   ListTile(
-                    leading: Icon(Icons.directions_car_filled),
-                    title: Text('Vehicle Assignment'),
+                    leading: Icon(Icons.directions_car_filled, color: Colors.tealAccent),
+                    title: Text('Vehicle Assignment', style: TextStyle(fontSize: 16)),
                     onTap: () {
                       Get.to(() => AssignVehicleScreen());
                     },
@@ -103,8 +106,8 @@ class AdminDashboardScreen extends StatelessWidget {
             } else if (_controller.userRole.value == 'driver') {
               // Only show Vehicle Assignment for drivers
               return ListTile(
-                leading: Icon(Icons.directions_car_filled),
-                title: Text('Vehicle Assignment'),
+                leading: Icon(Icons.directions_car_filled, color: Colors.tealAccent),
+                title: Text('Vehicle Assignment', style: TextStyle(fontSize: 16)),
                 onTap: () {
                   Get.to(() => AssignVehicleScreen());
                 },
