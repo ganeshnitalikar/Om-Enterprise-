@@ -13,8 +13,14 @@ class AddEmployeeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         title: Text('Add Employee',style: Themes.light.textTheme.displaySmall),
         backgroundColor: Themes.light.colorScheme.background, // AppBar color customization
+=======
+        title:
+            Text('Add Employee', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.teal, // AppBar color customization
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -37,6 +43,7 @@ class AddEmployeeScreen extends StatelessWidget {
 
             // Dropdown to select Role
             Obx(() => DropdownButtonFormField<String>(
+<<<<<<< HEAD
               decoration: InputDecoration(
                 labelText: 'Select Role',
                 border: OutlineInputBorder(
@@ -56,6 +63,27 @@ class AddEmployeeScreen extends StatelessWidget {
                 );
               }).toList(),
             )),
+=======
+                  decoration: InputDecoration(
+                    labelText: 'Select Role',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  value: controller.selectedRole.value.isNotEmpty
+                      ? controller.selectedRole.value
+                      : null,
+                  onChanged: (value) {
+                    controller.selectedRole.value = value ?? '';
+                  },
+                  items: controller.roles.map((role) {
+                    return DropdownMenuItem<String>(
+                      value: role['id'].toString(),
+                      child: Text(role['label']),
+                    );
+                  }).toList(),
+                )),
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
             SizedBox(height: 20),
 
             // First Name and Last Name Fields
@@ -118,7 +146,12 @@ class AddEmployeeScreen extends StatelessWidget {
               icon: Icon(Icons.upload_file),
               label: Text('Upload Photo'),
               style: ElevatedButton.styleFrom(
+<<<<<<< HEAD
                 minimumSize: Size(double.infinity, 50), backgroundColor: Colors.teal,
+=======
+                minimumSize: Size(double.infinity, 50),
+                backgroundColor: Colors.teal,
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -164,6 +197,7 @@ class AddEmployeeScreen extends StatelessWidget {
 
             // Active Checkbox
             Obx(() => CheckboxListTile(
+<<<<<<< HEAD
               title: Text('Active'),
               value: controller.isActive.value,
               onChanged: (val) {
@@ -172,6 +206,16 @@ class AddEmployeeScreen extends StatelessWidget {
               activeColor: Colors.teal,
               controlAffinity: ListTileControlAffinity.leading,
             )),
+=======
+                  title: Text('Active'),
+                  value: controller.isActive.value,
+                  onChanged: (val) {
+                    controller.isActive.value = val ?? false;
+                  },
+                  activeColor: Colors.teal,
+                  controlAffinity: ListTileControlAffinity.leading,
+                )),
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
             SizedBox(height: 30),
 
             // Save Button
@@ -184,7 +228,12 @@ class AddEmployeeScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
+<<<<<<< HEAD
                 minimumSize: Size(double.infinity, 50), backgroundColor: Colors.teal,
+=======
+                minimumSize: Size(double.infinity, 50),
+                backgroundColor: Colors.teal,
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

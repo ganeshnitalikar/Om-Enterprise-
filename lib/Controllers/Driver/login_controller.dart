@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:om/Api%20Service/api_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:om/Services/api_service.dart';
+import 'package:om/Services/shared_preferences_service.dart';
 
 class LoginController extends GetxController {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   final APIService apiService = APIService();
 
   var isLoading = false.obs;
@@ -25,24 +26,29 @@ class LoginController extends GetxController {
       final response = await apiService.login(username, password);
 
       if (response['statusCode'] == 200) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('username', response['result']['userName']);
-        await prefs.setInt('employeeId', response['result']['employeeId']);
-        await prefs.setString('token', response['result']['token']);
+        // Save token and role in shared preferences
+        sharedPrefs.setToken(response['result']['token']);
+        sharedPrefs.setEmployeeId(response['result']['employeeId']);
+        sharedPrefs.setUsername(response['result']['userName']);
+        sharedPrefs.setemployeeRole(response['result']['employeeRole']);
 
+        // Navigate based on employee role
         if (response['result']['employeeRole'] == 'Driver') {
           Get.offNamed('/driverDashboard', arguments: {
             'username': response['result']['userName'],
             'employeeId': response['result']['employeeId']
           });
         } else if (response['result']['employeeRole'] == 'Admin') {
-          Get.offNamed('/AdminDashboard', arguments: {
+          Get.offNamed('/adminDashboard', arguments: {
             'username': response['result']['userName'],
             'employeeId': response['result']['employeeId']
           });
         } else {
           Get.snackbar('Error', 'Invalid Employee Type');
         }
+
+        usernameController.clear();
+        passwordController.clear();
       } else {
         Get.snackbar('Login Failed', response['message']);
       }
@@ -51,5 +57,17 @@ class LoginController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  Future<void> logout() async {
+    await sharedPrefs.clearPreferences();
+    Get.toNamed('/login');
+  }
+
+  @override
+  void onClose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.onClose();
   }
 }

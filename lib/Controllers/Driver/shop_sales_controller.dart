@@ -3,166 +3,243 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:om/Services/api_service.dart';
 import 'dart:convert';
+import 'package:om/Services/shared_preferences_service.dart'; // Assuming this handles shared preferences
 
 class ShopSalesController extends GetxController {
+  // Text editing controllers
   TextEditingController shopNameController = TextEditingController();
   TextEditingController totalAmountController = TextEditingController();
   TextEditingController cashAmountController = TextEditingController();
   TextEditingController chequeAmountController = TextEditingController();
   TextEditingController onlineAmountController = TextEditingController();
   TextEditingController searchController = TextEditingController();
+  TextEditingController discountController = TextEditingController();
+  TextEditingController balanceController = TextEditingController();
 
-  var selectedShop = ''.obs; 
+  // Boolean flags for payment methods
+  Rx<bool> isCash = false.obs;
+  Rx<bool> isCheque = false.obs;
+  Rx<bool> isOnline = false.obs;
+  Rx<bool> isBalance = false.obs;
+  Rx<bool> isDiscount = false.obs;
 
-  File? chequeImage;
-  File? onlineReceipt;
-  RxList<String> searchResults = <String>[].obs;
-  String routeId =
-      "2"; // hardcoded routeId, replace with actual routeId if necessary
+  // Observable variables for shop and results
+  var selectedShop = ''.obs;
+  var selectedResult = ''.obs;
+
+  // IDs for various fields
+  var assignId = 0;
+  var routeId = 0;
+  var employeeId = 0;
+  var selectedShopId = 0;
+
+  // Files for media
+  Rx<File?> chequeImage = Rx<File?>(null);
+  Rx<File?> balanceImage = Rx<File?>(null);
+  Rx<File?> onlineReceipt = Rx<File?>(null);
+
+  // Search results list
+  RxList<Map<String, dynamic>> searchResults = <Map<String, dynamic>>[].obs;
+
+  void fetchRequiredData() {
+    assignId = sharedPrefs.getAssignId();
+    routeId = sharedPrefs.getRouteId();
+    employeeId = sharedPrefs.getEmpId();
+  }
 
   // Search functionality
   Future<void> performSearch(String searchString) async {
-    const int routeId = 2; // Replace with the actual routeId if necessary
-    final String url =
-        'http://139.59.7.147:7071/driverOperations/getShopAutoComplete/$routeId/$searchString';
+    int routeId = sharedPrefs.getRouteId();
 
     try {
-      // Clear previous search results
       searchResults.clear();
-
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-
-        if (data['statusCode'] == 200) {
-          // Extract and add the labels to the searchResults list
-          for (var shop in data['result']) {
-            searchResults.add(shop['label']);
-          }
-        } else {
-          // Handle case where no data is found
-          searchResults.clear(); // Clear search results if no data
-        }
-      } else {
-        // Handle error responses from the server
-        searchResults.clear(); // Clear search results on error
-        print(
-            'Error: Server responded with status code ${response.statusCode}');
-      }
+      searchResults
+          .addAll(await APIService().performSearch(routeId, searchString));
     } catch (e) {
-      // Handle exceptions
-      searchResults.clear(); // Clear search results on error
-      print('Error fetching shops: $e');
-      // Optionally show a user-friendly message or snackbar
-      Get.snackbar('Error', 'Failed to fetch shops. Please try again.');
+      Get.snackbar('Error', 'Failed to fetch shops: $e');
     }
   }
 
-  
-  Future<void> pickChequeMedia() async {
+  void clearImages() {
+    if (isCash.value) {
+      isCheque.value = false;
+      isOnline.value = false;
+      isBalance.value = false;
+
+      isDiscount.value = false;
+      onlineAmountController.clear();
+      discountController.clear();
+      balanceController.clear();
+      chequeAmountController.clear();
+      chequeImage.value = null;
+      balanceImage.value = null;
+      onlineReceipt.value = null;
+    } else if (isCheque.value) {
+      isCash.value = false;
+      isOnline.value = false;
+      isBalance.value = false;
+
+      isDiscount.value = false;
+
+      cashAmountController.clear();
+      onlineAmountController.clear();
+      discountController.clear();
+      balanceController.clear();
+      balanceImage.value = null;
+      onlineReceipt.value = null;
+    } else if (isOnline.value) {
+      isCash.value = false;
+      isCheque.value = false;
+      isBalance.value = false;
+
+      isDiscount.value = false;
+
+      cashAmountController.clear();
+      chequeAmountController.clear();
+      discountController.clear();
+      balanceController.clear();
+      chequeImage.value = null;
+      balanceImage.value = null;
+    } else if (isBalance.value) {
+      isCash.value = false;
+      isCheque.value = false;
+      isOnline.value = false;
+      isDiscount.value = false;
+
+      onlineAmountController.clear();
+      discountController.clear();
+      cashAmountController.clear();
+      chequeImage.value = null;
+      onlineReceipt.value = null;
+    } else if (isDiscount.value) {
+      isCash.value = false;
+      isCheque.value = false;
+      isOnline.value = false;
+      isBalance.value = false;
+
+      cashAmountController.clear();
+      chequeAmountController.clear();
+      onlineAmountController.clear();
+      balanceController.clear();
+      chequeImage.value = null;
+      balanceImage.value = null;
+      onlineReceipt.value = null;
+    }
+  }
+
+  Future<void> pickMedia() async {
     final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.camera);
-
     if (pickedFile != null) {
-      chequeImage = File(pickedFile.path);
-      update(); // Updates the UI if required
+      File image = File(pickedFile.path);
+
+      if (isCheque.value) {
+        chequeImage.value = image;
+      } else if (isBalance.value) {
+        balanceImage.value = image;
+      } else if (isOnline.value) {
+        onlineReceipt.value = image;
+      }
+
+      update(); // Call update to notify listeners
     }
   }
 
-  
-  Future<void> pickOnlineMedia() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-
-    if (pickedFile != null) {
-      onlineReceipt = File(pickedFile.path);
-      update(); // Updates the UI if required
-    }
+  //convert images to base64
+  String? _imageToBase64(File? image) {
+    if (image == null) return null;
+    return base64Encode(image.readAsBytesSync());
   }
 
-  
+  // Save sales info with image handling
   Future<void> saveSalesInfo() async {
-    // Prepare the request body
+    // Shop selection validation
+    if (selectedShopId == 0) {
+      Get.snackbar('Error', 'Please select a shop');
+      return;
+    }
+
+    // Ensure only one payment method is selected
+    int paymentMethodsSelected = 0;
+    if (isCash.value) paymentMethodsSelected++;
+    if (isCheque.value) paymentMethodsSelected++;
+    if (isOnline.value) paymentMethodsSelected++;
+    if (isBalance.value) paymentMethodsSelected++;
+    if (paymentMethodsSelected != 1) {
+      Get.snackbar('Error', 'Please select exactly one payment method');
+      return;
+    }
+
+    // Validate specific fields based on the selected payment method
+    if (isCash.value) {
+      if (cashAmountController.text.isEmpty) {
+        Get.snackbar('Error', 'Please enter cash amount');
+        return;
+      }
+    } else if (isCheque.value) {
+      if (chequeAmountController.text.isEmpty) {
+        Get.snackbar('Error', 'Please enter cheque amount');
+        return;
+      }
+      if (chequeImage.value == null) {
+        Get.snackbar('Error', 'Please upload cheque image');
+        return;
+      }
+    } else if (isOnline.value) {
+      if (onlineAmountController.text.isEmpty) {
+        Get.snackbar('Error', 'Please enter online payment amount');
+        return;
+      }
+      if (onlineReceipt.value == null) {
+        Get.snackbar('Error', 'Please upload online payment receipt');
+        return;
+      }
+    } else if (isBalance.value) {
+      if (balanceController.text.isEmpty) {
+        Get.snackbar('Error', 'Please enter balance amount');
+        return;
+      }
+      if (balanceImage.value == null) {
+        Get.snackbar('Error', 'Please upload balance image');
+        return;
+      }
+    }
+
+    fetchRequiredData();
+    print("Assign ID: $assignId");
+    print("Route ID: $routeId");
+    print("Employee ID: $employeeId");
+    print("Selected Shop ID: $selectedShopId");
+
+    // Prepare the request body with base64 encoded images
     final requestBody = {
-      "assignVehicleId": {
-        "id": 0,
-        "employeeId": {
-          "createdBy": 2,
-          "lastModifiedBy": 2,
-          "id": 0,
-          "roleId": {
-            "createdBy": 0,
-            "lastModifiedBy": 0,
-            "id": 0,
-            "role": "driver",
-            "isActive": true,
-            "isDelete": true
-          },
-          "firstName": "John",
-          "lastName": "Doe",
-          "mobileNo": "1234567890",
-          "aadhaarNo": "1234-5678-9123",
-          "photoPath": "path/to/photo",
-          "userName": "johndoe",
-          "password": "password",
-          "isActive": true,
-          "isDelete": true
-        },
-        "vehicleId": {
-          "createdBy": 0,
-          "lastModifiedBy": 0,
-          "id": 0,
-          "vehicleNo": "XYZ123",
-          "isActive": true,
-          "isDelete": true
-        },
-        "routeId": {
-          "createdBy": 0,
-          "lastModifiedBy": 0,
-          "id": 0,
-          "routeName": "Route A",
-          "isActive": true,
-          "isDelete": true
-        },
-        "assignById": {
-          "createdBy": 0,
-          "lastModifiedBy": 0,
-          "id": 0,
-          "roleId": {
-            "createdBy": 0,
-            "lastModifiedBy": 0,
-            "id": 0,
-            "role": "string",
-            "isActive": true,
-            "isDelete": true
-          },
-          "firstName": "Jane",
-          "lastName": "Smith",
-          "mobileNo": "0987654321",
-          "aadhaarNo": "1234-5678-9124",
-          "photoPath": "path/to/photo",
-          "userName": "janesmith",
-          "password": "password",
-          "isActive": true,
-          "isDelete": true
-        },
-        "assignDateTime": DateTime.now().toIso8601String(), // Use current time
-        "isComplete": true,
-        "totalMaterial": 0,
-        "totalSale": 0,
-        "returnInVehicle": 0,
-        "totalExpense": 0,
-        "totalDiscount": 0,
-        "extraProfitAmount": 0
-      },
-      "expenseAmount": double.tryParse(totalAmountController.text) ?? 0,
-      "reason": "Expense reason here",
-      "createdBy": 0 // Provide the creator's ID
+      "assignId": {"id": assignId},
+      "shopId": {"id": selectedShopId},
+      "isCash": isCash.value,
+      "cashAmount":
+          cashAmountController.text == '' ? 0 : cashAmountController.text,
+      "isOnline": isOnline.value,
+      "onlineAmount":
+          onlineAmountController.text == '' ? 0 : onlineAmountController.text,
+      "onlinePhoto": _imageToBase64(onlineReceipt.value) ?? "string",
+      "isCheck": isCheque.value,
+      "checkAmount":
+          chequeAmountController.text == '' ? 0 : chequeAmountController.text,
+      "checkPhoto": _imageToBase64(chequeImage.value) ?? "string",
+      "isBalance": isBalance.value,
+      "balanceAmount":
+          balanceController.text == '' ? 0 : balanceController.text,
+      "balancePhoto": _imageToBase64(balanceImage.value) ?? "string",
+      "isDiscount": isDiscount.value,
+      "discountAmount":
+          discountController.text == '' ? 0 : discountController.text,
+      "createdBy": employeeId
     };
 
-    // Execute the POST request
+    print("Request Body: ${jsonEncode(requestBody)}");
+
     try {
       final response = await http.post(
         Uri.parse(
@@ -174,19 +251,17 @@ class ShopSalesController extends GetxController {
         body: jsonEncode(requestBody),
       );
 
-      // Check response status
       if (response.statusCode == 200) {
-        // Handle success
         Get.snackbar("Success", "Sales info saved successfully!");
+        Get.offAllNamed('/driverDashboard');
       } else {
-        // Handle error
         final responseBody = jsonDecode(response.body);
         Get.snackbar(
             "Error", responseBody['error'] ?? "Unknown error occurred");
+        Get.offAllNamed('/driverDashboard');
       }
     } catch (e) {
-      // Handle exceptions (e.g., network issues)
-      Get.snackbar("Error", e.toString());
+      Get.snackbar("Error Here", e.toString());
     }
   }
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
@@ -5,12 +6,18 @@ import 'package:om/Screens/Admin/add_employee.dart';
 import 'package:om/Utils/themes.dart';
 
 
+=======
+
+import 'package:flutter/material.dart';
+import 'package:om/Screens/Admin/add_employee.dart';
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
 import '../../Api Service/Admin/employee_service.dart';
 
 class EmployeeScreen extends StatefulWidget {
   @override
   _EmployeeScreenState createState() => _EmployeeScreenState();
 }
+
 
 class _EmployeeScreenState extends State<EmployeeScreen> {
   final EmployeeService _employeeService = EmployeeService();
@@ -45,51 +52,32 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              SizedBox(height: 10),
               Text(
                 'Update Employee',
+<<<<<<< HEAD
                 style: Themes.light.textTheme.headlineMedium,
+=======
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(labelText: 'Employee Name'),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter a name';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _roleController,
-                      decoration: InputDecoration(labelText: 'Role'),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter a role';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _contactController,
-                      decoration: InputDecoration(labelText: 'Contact No'),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter a contact number';
-                        }
-                        return null;
-                      },
-                    ),
+                    _buildTextField(_nameController, 'Employee Name'),
+                    _buildTextField(_roleController, 'Role'),
+                    _buildTextField(_contactController, 'Contact No'),
                     SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
@@ -103,7 +91,13 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                           Navigator.pop(context);
                         }
                       },
-                      child: Text('Update'),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 45),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text('Update', style: TextStyle(fontSize: 16)),
                     ),
                   ],
                 ),
@@ -112,6 +106,27 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String labelText) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: labelText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter $labelText';
+          }
+          return null;
+        },
+      ),
     );
   }
 
@@ -166,11 +181,10 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     );
   }
 
-  // Add Employee Button - Navigate to AddEmployeeScreen
   void _navigateToAddEmployee() {
     Navigator.push(
       context,
-       MaterialPageRoute(builder: (context) => AddEmployeeScreen()),
+      MaterialPageRoute(builder: (context) => AddEmployeeScreen()),
     );
   }
 
@@ -178,9 +192,14 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         title: Text('Employees',style: Themes.light.textTheme.headlineSmall,),
         backgroundColor: Themes.light.colorScheme.background,
         actions: [
+=======
+        title: Text('Employees'),
+          actions: [
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
           IconButton(
             icon: Icon(Icons.add),
             onPressed: _navigateToAddEmployee,
@@ -188,56 +207,68 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           ),
         ],
       ),
-      body: _errorMessage.isNotEmpty
-          ? Center(child: Text(_errorMessage))
-          : ListView.builder(
-              padding: EdgeInsets.all(8.0),
-              itemCount: _employees.length,
-              itemBuilder: (context, index) {
-                final employee = _employees[index];
-                return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8.0),
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.all(16.0),
-                    title: Text(
-                      employee['Employee Name'],
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 4),
-                        Text('Role: ${employee['Role']}'),
-                        Text('Contact: ${employee['Contact No']}'),
-                        Text('Status: ${employee['Status'] ? 'Active' : 'Inactive'}'),
-                      ],
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.edit, color: Colors.blue),
-                          onPressed: () => _showUpdateBottomSheet(employee),
-                          tooltip: 'Update',
+      body: Container(
+        padding: EdgeInsets.all(16.0), // Add padding for the main body
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue[100]!, Colors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: _errorMessage.isNotEmpty
+            ? Center(child: Text(_errorMessage, style: TextStyle(color: Colors.red)))
+            : _employees.isEmpty
+                ? Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    itemCount: _employees.length,
+                    itemBuilder: (context, index) {
+                      final employee = _employees[index];
+                      return Card(
+                        margin: EdgeInsets.symmetric(vertical: 8.0),
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => _showDeleteConfirmationDialog(employee['Id']),
-                          tooltip: 'Delete',
+                        child: ListTile(
+                          contentPadding: EdgeInsets.all(16.0),
+                          title: Text(
+                            employee['Employee Name'],
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 4),
+                              Text('Role: ${employee['Role']}'),
+                              Text('Contact: ${employee['Contact No']}'),
+                              Text('Status: ${employee['Status'] ? 'Active' : 'Inactive'}'),
+                            ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.edit, color: Colors.blue),
+                                onPressed: () => _showUpdateBottomSheet(employee),
+                                tooltip: 'Update',
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.red),
+                                onPressed: () => _showDeleteConfirmationDialog(employee['Id']),
+                                tooltip: 'Delete',
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
+      ),
     );
   }
 }

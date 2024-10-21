@@ -21,67 +21,66 @@ class ShopSalesScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Shop Name Search Field
-              TextField(
-                controller: controller.shopNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Shop Name',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  // Perform search on text change
-                  controller.performSearch(value);
-
-                  if (value.isEmpty) {
-                    controller.selectedShop.value =
-                        ''; // Clear selected shop when input is empty
-                    controller.searchResults.clear(); // Clear search results
-                  }
-                },
-              ),
-
-              const SizedBox(height: 8), // Add some spacing
-
-              // Dropdown for Search Results
-              Obx(() {
-                return DropdownButton<String>(
-                  hint: const Text('Select Shop'),
-                  value: controller.selectedShop.value.isNotEmpty
-                      ? controller.selectedShop.value
-                      : null,
-                  items: controller.searchResults.map((shopName) {
-                    return DropdownMenuItem<String>(
-                      value: shopName,
-                      child: Text(shopName),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    controller.selectedShop.value =
-                        newValue ?? ''; // Assign selected shop to controller
-                    controller.shopNameController.text =
-                        controller.selectedShop.value; // Set the text field
-                    controller.searchResults
-                        .clear(); // Clear the dropdown after selection
-                  },
-                  isExpanded:
-                      true, // Make dropdown expand to fill available space
-                  underline: Container(
-                    height: 1,
-                    color: Colors.grey,
-                  ),
-                );
-              }),
+              Obx(() => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        controller: controller.shopNameController,
+                        onChanged: (value) {
+                          controller.performSearch(value);
+                          controller.isDiscount.value = true;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Shop Name',
+                          labelStyle: Get.theme.textTheme.labelLarge!.copyWith(
+                            color: Colors.black,
+                          ),
+                          hintText: 'Start typing to search for a shop...',
+                          suffixIcon: Icon(Icons.search),
+                        ),
+                      ),
+                      if (controller.searchResults.isNotEmpty)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: controller.searchResults.length,
+                            itemBuilder: (context, index) {
+                              final shopLabel =
+                                  controller.searchResults[index]['label'];
+                              final shopId =
+                                  controller.searchResults[index]['id'];
+                              return ListTile(
+                                title: Text(shopLabel),
+                                onTap: () {
+                                  controller.shopNameController.text =
+                                      shopLabel;
+                                  controller.selectedShopId = shopId;
+                                  controller.searchResults
+                                      .clear(); // Clear the dropdown
+                                  controller.update(); // Trigger UI update
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                    ],
+                  )),
 
               const SizedBox(height: 16),
 
-              // Total Amount Field
-              TextField(
-                controller: controller.totalAmountController,
+              //Discount field
+              const SizedBox(height: 10),
+              inputField(
+                controller: controller.discountController,
+                labelText: 'Discount',
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Total Amount',
-                  border: OutlineInputBorder(),
-                ),
               ),
+
               const SizedBox(height: 16),
 
               // Payment Method
@@ -90,89 +89,220 @@ class ShopSalesScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Cash Payment Method
-              Row(
-                children: [
-                  const Text('Cash',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  Expanded(
-                    child: TextField(
-                      controller: controller.cashAmountController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Cash Amount',
-                        border: OutlineInputBorder(),
+              Obx(
+                () {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          controller.isCash.value = !controller.isCash.value;
+                          // Disable other payment methods if cash is selected
+                          if (controller.isCash.value) {
+                            controller.clearImages();
+                          }
+                          controller.update();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                            color: controller.isCash.value
+                                ? Colors.green
+                                : Colors.blue,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const Text('Cash',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                ],
+                      if (controller.isCash.value) ...[
+                        SizedBox(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width * .5,
+                          child: TextField(
+                            controller: controller.cashAmountController,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Cash Amount',
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  );
+                },
               ),
-
+              const SizedBox(height: 20),
               // Cheque Payment Method
-              Row(
-                children: [
-                  const Text('Cheque',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  Expanded(
-                    child: TextField(
-                      controller: controller.chequeAmountController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Cheque Amount',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: controller.pickChequeMedia,
-                    child: const Text('Add Cheque Photo'),
-                  ),
-                ],
+
+              PaymentMethodWidget(
+                title: 'Cheque',
+                controller: controller.chequeAmountController,
+                isSelected: controller.isCheque,
+                onSelect: () {
+                  controller.isCheque.value = !controller.isCheque.value;
+                  if (controller.isCheque.value) {
+                    controller.clearImages();
+                  }
+                  controller.update();
+                },
+                labelText: 'Cheque Amount',
               ),
 
-              // Online Payment Method
-              Row(
-                children: [
-                  const Text('Online',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  Expanded(
-                    child: TextField(
-                      controller: controller.onlineAmountController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Online Amount',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: controller.pickOnlineMedia,
-                    child: const Text('Add Online Receipt'),
-                  ),
-                ],
+              const SizedBox(height: 20),
+
+// Online Payment Method
+              PaymentMethodWidget(
+                title: 'Online',
+                controller: controller.onlineAmountController,
+                isSelected: controller.isOnline,
+                onSelect: () {
+                  controller.isOnline.value = !controller.isOnline.value;
+                  if (controller.isOnline.value) {
+                    controller.clearImages();
+                  }
+                  controller.update();
+                },
+                labelText: 'Online Amount',
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
+// Balance Payment Method
+              PaymentMethodWidget(
+                title: 'Balance',
+                controller: controller.balanceController,
+                isSelected: controller.isBalance,
+                onSelect: () {
+                  controller.isBalance.value = !controller.isBalance.value;
+                  if (controller.isBalance.value) {
+                    controller.clearImages();
+                  }
+                  controller.update();
+                },
+                labelText: 'Balance Amount',
+              ),
+
+              const SizedBox(height: 20),
+
+// Discount Field
+
+              const SizedBox(height: 30),
               // Submit Button
               submitButton(
-                  text: "Add Expense",
-                  onPressed: () {
-                    controller.saveSalesInfo();
-                  }),
+                text: "Add Expense",
+                onPressed: () {
+                  controller.saveSalesInfo();
+                },
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget cameraButton({required Function onPressed}) {
+    return IconButton(
+      onPressed: () {
+        onPressed();
+      },
+      icon: const Icon(Icons.camera_alt),
+    );
+  }
+}
+
+class PaymentMethodWidget extends StatelessWidget {
+  final String title;
+  final TextEditingController controller;
+  final Rx<bool> isSelected;
+  final Function onSelect;
+  final String labelText;
+
+  const PaymentMethodWidget({
+    super.key,
+    required this.title,
+    required this.controller,
+    required this.isSelected,
+    required this.onSelect,
+    required this.labelText,
+  });
+
+  ShopSalesController get screencontroller => Get.find<ShopSalesController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              onSelect();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                color: isSelected.value ? Colors.green : Colors.blue,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          isSelected.value
+              ? Flexible(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * .5,
+                        child: TextField(
+                          controller: controller,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: labelText,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          screencontroller.pickMedia();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.camera_alt, size: 40),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox(),
+        ],
+      );
+    });
   }
 }

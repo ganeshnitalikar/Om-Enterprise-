@@ -43,7 +43,7 @@ class _ShopScreenState extends State<ShopScreen> {
         shopContact: shopContact,
         routeId: int.parse(_selectedRouteId!),
         isActive: _isActive,
-        createdBy: 2, // Assuming static values; adjust as needed
+        createdBy: 2,
         updatedBy: 2,
       );
 
@@ -61,58 +61,138 @@ class _ShopScreenState extends State<ShopScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = Colors.blueAccent;
+    final Color secondaryColor = Colors.white;
+    final double borderRadius = 12.0;
+    final double elevation = 5.0;
+
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         title: Text('Shop Management',style: Themes.light.textTheme.headlineSmall,),
         backgroundColor: Themes.light.colorScheme.background
+=======
+        title: Text('Shop Management'),
+        backgroundColor: primaryColor,
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _shopNameController,
-              decoration: InputDecoration(labelText: 'Shop Name'),
-            ),
-            TextField(
-              controller: _shopContactController,
-              decoration: InputDecoration(labelText: 'Shop Contact'),
-              keyboardType: TextInputType.phone,
-            ),
-            DropdownButtonFormField<String>(
-              value: _selectedRouteId,
-              hint: Text('Select Route'),
-              items: _routes.map((route) {
-                return DropdownMenuItem<String>(
-                  value: route['id'].toString(), // Ensure id is a string
-                  child: Text(route['label']), // Adjust according to your API response
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedRouteId = value;
-                });
-              },
-            ),
-            Row(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+          elevation: elevation,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Checkbox(
-                  value: _isActive,
+                // Shop Name Field
+                TextField(
+                  controller: _shopNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Shop Name',
+                    labelStyle: TextStyle(color: primaryColor),
+                    filled: true,
+                    fillColor: secondaryColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: BorderSide(color: primaryColor, width: 2.0),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
+                // Shop Contact Field
+                TextField(
+                  controller: _shopContactController,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    labelText: 'Shop Contact',
+                    labelStyle: TextStyle(color: primaryColor),
+                    filled: true,
+                    fillColor: secondaryColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: BorderSide(color: primaryColor, width: 2.0),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
+                // Route Dropdown
+                DropdownButtonFormField<String>(
+                  value: _selectedRouteId,
+                  hint: Text('Select Route'),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: secondaryColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: BorderSide(color: primaryColor, width: 2.0),
+                    ),
+                  ),
+                  items: _routes.map((route) {
+                    return DropdownMenuItem<String>(
+                      value: route['id'].toString(),
+                      child: Text(route['label']),
+                    );
+                  }).toList(),
                   onChanged: (value) {
                     setState(() {
-                      _isActive = value ?? false;
+                      _selectedRouteId = value;
                     });
                   },
                 ),
-                Text('Is Active'),
+                SizedBox(height: 16),
+                // Active Checkbox
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _isActive,
+                      onChanged: (value) {
+                        setState(() {
+                          _isActive = value ?? false;
+                        });
+                      },
+                      activeColor: primaryColor,
+                    ),
+                    Text(
+                      'Is Active',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30),
+                // Save Button
+                ElevatedButton(
+                  onPressed: _saveShop,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                    ),
+                  ),
+                  child: Text(
+                    'Save Shop',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _saveShop,
-              child: Text('Save Shop'),
-            ),
-          ],
+          ),
         ),
       ),
     );
