@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:om/Utils/themes.dart';
 import '../../Controllers/Admin/route_controller.dart';
 
 class RouteView extends StatelessWidget {
@@ -9,18 +10,11 @@ class RouteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Route Management',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+          title: Text(
+            'Route Management',
+            style: Themes.light.textTheme.headlineSmall,
           ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.blueAccent,
-        elevation: 0,
-      ),
+          backgroundColor: Themes.light.colorScheme.background),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

@@ -1,6 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:om/Controllers/Admin/add_employee_controller.dart';
+import 'package:om/Utils/themes.dart';
 
 class AddEmployeeScreen extends StatelessWidget {
   final AddEmployeeController controller = Get.put(AddEmployeeController());
@@ -9,9 +13,10 @@ class AddEmployeeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('Add Employee', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.teal, // AppBar color customization
+        title: Text('Add Employee', style: Themes.light.textTheme.displaySmall),
+        backgroundColor:
+            Themes.light.colorScheme.background, // AppBar color customization
+
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -170,6 +175,7 @@ class AddEmployeeScreen extends StatelessWidget {
                   activeColor: Colors.teal,
                   controlAffinity: ListTileControlAffinity.leading,
                 )),
+
             SizedBox(height: 30),
 
             // Save Button

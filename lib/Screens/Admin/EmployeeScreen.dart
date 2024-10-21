@@ -1,6 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:om/Screens/Admin/add_employee.dart';
+import 'package:om/Utils/themes.dart';
+
+
 import '../../Api Service/Admin/employee_service.dart';
 
 class EmployeeScreen extends StatefulWidget {
@@ -54,7 +57,9 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
               SizedBox(height: 10),
               Text(
                 'Update Employee',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+
+                style: Themes.light.textTheme.headlineMedium,
+
               ),
               SizedBox(height: 20),
               Form(
@@ -178,8 +183,10 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Employees'),
-          actions: [
+        title: Text('Employees',style: Themes.light.textTheme.headlineSmall,),
+        backgroundColor: Themes.light.colorScheme.background,
+        actions: [
+
           IconButton(
             icon: Icon(Icons.add),
             onPressed: _navigateToAddEmployee,

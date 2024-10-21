@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:om/Utils/themes.dart';
 import '../../Api Service/Admin/shop_service.dart';
 import '../../Model/Admin/shop.dart';
 
@@ -34,7 +37,9 @@ class _ShopScreenState extends State<ShopScreen> {
     final String shopName = _shopNameController.text;
     final String shopContact = _shopContactController.text;
 
-    if (shopName.isNotEmpty && shopContact.isNotEmpty && _selectedRouteId != null) {
+    if (shopName.isNotEmpty &&
+        shopContact.isNotEmpty &&
+        _selectedRouteId != null) {
       final shop = Shop(
         shopName: shopName,
         shopContact: shopContact,
@@ -45,7 +50,8 @@ class _ShopScreenState extends State<ShopScreen> {
       );
 
       try {
-        await _shopService.saveShop(shop, 'http://139.59.7.147:7071/masters/saveShop');
+        await _shopService.saveShop(
+            shop, 'http://139.59.7.147:7071/masters/saveShop');
         // Handle success
         print('Shop saved successfully!');
       } catch (e) {

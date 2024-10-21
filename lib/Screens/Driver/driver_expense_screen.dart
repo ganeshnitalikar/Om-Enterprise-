@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:om/Controllers/Driver/driver_expense_controller.dart';
-import 'package:om/utils.dart';
+import 'package:om/Utils/utils.dart';
 
 class PersonalExpenseScreen extends StatelessWidget {
   final DriverExpenseController controller = Get.put(DriverExpenseController());

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:om/Utils/utils.dart';
 
 import 'package:om/Screens/Admin/admin_dashboard_screen.dart';
 import 'package:om/Screens/Driver/driver_dashboard_screen.dart';
@@ -9,7 +10,6 @@ import 'package:om/Screens/Driver/login_screen.dart';
 import 'package:om/Screens/Driver/driver_expense_screen.dart';
 import 'package:om/Screens/Driver/shop_sales_screen.dart';
 import 'package:om/Services/shared_preferences_service.dart';
-import 'package:om/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

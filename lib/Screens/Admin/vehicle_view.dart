@@ -1,7 +1,10 @@
 // vehicle_view.dart
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Admin/VehicleController.dart';
+import 'package:om/Utils/themes.dart';
 
 class VehicleView extends StatelessWidget {
   final VehicleController _controller = Get.put(VehicleController());
@@ -10,7 +13,8 @@ class VehicleView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Vehicle Management'),
+        title: Text('Vehicle Management',style: Themes.light.textTheme.headlineSmall,),
+        backgroundColor: Themes.light.colorScheme.background
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
