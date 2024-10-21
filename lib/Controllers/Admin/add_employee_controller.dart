@@ -12,11 +12,10 @@ class AddEmployeeController extends GetxController {
   var selectedRole = ''.obs;
   var isActive = false.obs;
   File? selectedImage;
+ // var isLoading = false.obs; 
 
 
-  // Pick an image from gallery (mobile)
   Future<void> pickImage() async {
-    // Mobile: use ImagePicker
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
@@ -26,8 +25,32 @@ class AddEmployeeController extends GetxController {
     }
   }
 
+  // Save employee data and upload the image
+  Future<void> saveEmployee() async {
+   //  isLoading.value = true;
+    if (selectedRole.isEmpty) {
+      Get.snackbar('Error', 'Please select a role.');
+      return;
+    }
+
+    final newEmployee = {
+      "roleId": {
+        "id": int.parse(selectedRole.value),
+      },
+      "firstName": firstNameController.text,
+      "lastName": lastNameController.text,
+      "mobileNo": mobileNoController.text,
+      "aadhaarNo": aadhaarNoController.text,
+      "isActive": isActive.value,
+      "createdBy": 1,
+      "updatedBy": 1,
+      "userName": userNameController.text,
+      "password": passwordController.text,
+    };
+
     try {
       print('Saving employee with data: $newEmployee');
+     // await Future.delayed(Duration(seconds: 2));
       // Save employee with the selected image
       await _employeeService.saveEmployee(newEmployee, imageFile: selectedImage);
       Get.snackbar('Success', 'Employee saved successfully');
