@@ -1,10 +1,9 @@
 import 'dart:io';
-import 'dart:html' as html; // For web file upload
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:om/Api%20Service/Admin/employee_service.dart';
-import 'package:universal_platform/universal_platform.dart'; // Platform check
+
+import '../../Api Service/Admin/employee_service.dart';
 
 class EmployeeController extends GetxController {
   final EmployeeService _employeeService = EmployeeService();
@@ -12,8 +11,7 @@ class EmployeeController extends GetxController {
   var employees = <Map<String, dynamic>>[].obs;
   var selectedRole = ''.obs;
   var isActive = false.obs;
-  File? selectedImage;
-  html.File? webImageFile; // For web platform image
+  File? selectedImage; // Only for mobile platform
 
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
@@ -38,28 +36,14 @@ class EmployeeController extends GetxController {
     }
   }
 
-  // Pick an image from gallery (mobile) or file (web)
+  // Pick an image from the gallery (mobile)
   Future<void> pickImage() async {
-    if (UniversalPlatform.isWeb) {
-      // Web: use dart:html
-      html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
-      uploadInput.accept = 'image/*';
-      uploadInput.click();
-      uploadInput.onChange.listen((e) {
-        final files = uploadInput.files;
-        if (files?.isEmpty ?? true) return;
-        webImageFile = files!.first; // Store the file for upload
-        print('Selected web image file: ${webImageFile?.name}');
-      });
-    } else if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
-      // Mobile: use ImagePicker
-      final ImagePicker _picker = ImagePicker();
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-      if (image != null) {
-        selectedImage = File(image.path);
-        print('Selected image path: ${selectedImage?.path}');
-      }
+    if (image != null) {
+      selectedImage = File(image.path);
+      print('Selected image path: ${selectedImage?.path}');
     }
   }
 
@@ -74,7 +58,6 @@ class EmployeeController extends GetxController {
         selectedRole.isEmpty) {
       return false; // Validation failed
     }
-    // Add any additional validation checks if necessary (like format checking)
     return true; // Validation passed
   }
 
@@ -102,12 +85,7 @@ class EmployeeController extends GetxController {
 
     try {
       print('Saving employee with data: $newEmployee');
-      // Check platform and send image appropriately
-      if (UniversalPlatform.isWeb) {
-        await _employeeService.saveEmployee(newEmployee, webImageFile?.name ?? ''); // Pass both arguments
-      } else {
-        await _employeeService.saveEmployee(newEmployee, selectedImage?.path ?? ''); // Pass both arguments
-      }
+      await _employeeService.saveEmployee(newEmployee, selectedImage as String); // Pass only the image
       Get.snackbar('Success', 'Employee saved successfully');
       return true; // Return true on success
     } catch (e) {

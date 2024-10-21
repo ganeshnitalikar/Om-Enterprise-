@@ -1,32 +1,16 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:om/Api%20Service/Admin/employee_service.dart';
+
 
 class EmployeeCard extends StatelessWidget {
   final Map employee;
   final Function refreshEmployees;
 
-  const EmployeeCard({required this.employee, required this.refreshEmployees, Key? key}) : super(key: key);
-
-  Future<void> deleteEmployee(int id) async {
-    final response = await http.delete(
-      Uri.parse('YOUR_API_URL/employees/$id'), // Update with your delete endpoint
-    );
-
-    if (response.statusCode == 200) {
-      // Successfully deleted
-      refreshEmployees(); // Refresh the list of employees
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-        SnackBar(content: Text('Employee deleted successfully')),
-      );
-    } else {
-      // Handle error
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-        SnackBar(content: Text('Failed to delete employee')),
-      );
-    }
-  }
+  const EmployeeCard({
+    required this.employee,
+    required this.refreshEmployees,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +21,14 @@ class EmployeeCard extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Edit Button (implement navigation to edit screen later)
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
                 // Handle update action
               },
             ),
+            // Delete Button
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
@@ -61,8 +47,18 @@ class EmployeeCard extends StatelessWidget {
                           child: Text('Cancel'),
                         ),
                         TextButton(
-                          onPressed: () {
-                            deleteEmployee(employee['Id']);
+                          onPressed: () async {
+                            bool success = await EmployeeService().deleteEmployee(employee['Id']);
+                            if (success) {
+                              refreshEmployees(); // Refresh the list of employees
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Employee deleted successfully')),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Failed to delete employee')),
+                              );
+                            }
                             Navigator.of(context).pop(); // Close dialog
                           },
                           child: Text('Delete'),

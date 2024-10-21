@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'dart:html' as html; // For web image uploading
 
 class EmployeeService {
+
+  Dio dio=Dio();
   // Fetch roles from the API
   Future<List<Map<String, dynamic>>> fetchRoles() async {
     final response = await http.get(Uri.parse('http://139.59.7.147:7071/masters/getRoleDropDown'));
@@ -20,25 +22,11 @@ class EmployeeService {
     return base64Encode(bytes);
   }
 
-  // Convert web file to base64 string
-  Future<String> _convertWebFileToBase64(html.File webImageFile) async {
-    final reader = html.FileReader();
-    reader.readAsArrayBuffer(webImageFile);
-    await reader.onLoad.first;
-    final bytes = reader.result as List<int>;
-    return base64Encode(bytes);
-  }
-
   // Save employee with base64 image
-  // Save employee with base64 image
-Future<void> saveEmployee(Map<String, dynamic> employeeData, String role, {File? imageFile, html.File? webImageFile}) async {
+  Future<void> saveEmployee(Map<String, dynamic> employeeData, String selectedImage, {File? imageFile}) async {
     if (imageFile != null) {
       // Convert the mobile image file to base64
       String base64Image = await _convertFileToBase64(imageFile);
-      employeeData['photo'] = base64Image;
-    } else if (webImageFile != null) {
-      // Convert the web image file to base64
-      String base64Image = await _convertWebFileToBase64(webImageFile);
       employeeData['photo'] = base64Image;
     }
 
@@ -58,10 +46,9 @@ Future<void> saveEmployee(Map<String, dynamic> employeeData, String role, {File?
       print('Error saving employee: ${response.body}');
       throw Exception('Failed to save employee: ${response.body}');
     }
-}
+  }
 
-//To show the cards on screen
-// Fetch all employees from the API
+  // Fetch all employees from the API
   Future<List<Map<String, dynamic>>> fetchEmployees() async {
     final response = await http.post(
       Uri.parse('http://139.59.7.147:7071/masters/getEmployeeList'),
@@ -79,8 +66,7 @@ Future<void> saveEmployee(Map<String, dynamic> employeeData, String role, {File?
     }
   }
 
-
-  //update employee
+  // Update employee
   Future<Map<String, dynamic>> updateEmployee(int id, String name, String role, String contact) async {
     final response = await http.post(
       Uri.parse('/employees/update'),
@@ -102,18 +88,14 @@ Future<void> saveEmployee(Map<String, dynamic> employeeData, String role, {File?
     }
   }
 
-//delete
-  Future<void> deleteEmployee(int employeeId) async {
+  // Delete employee
+  Future<bool> deleteEmployee(int employeeId) async {
     try {
-      final response = await http.delete(
-        Uri.parse('http://139.59.7.147:7071/masters/deleteEmployeeById/$employeeId'),
-      );
-
-      if (response.statusCode != 200) {
-        throw Exception('Failed to delete employee');
-      }
-    } catch (error) {
-      throw Exception('Error deleting employee: $error');
+      final response = await dio.delete('http://139.59.7.147:7071/masters/deleteEmployeeById/$employeeId');
+      return response.statusCode == 200;
+    } on DioException catch (e) {
+      print('Dio Exception: ${e.message}');
+      return false; // Indicate failure
     }
   }
 

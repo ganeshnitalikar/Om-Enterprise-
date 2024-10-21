@@ -1,8 +1,8 @@
 // vehicle_controller.dart
 import 'package:get/get.dart';
-import 'package:om/Api%20Service/Admin/VehicleService.dart';
-import 'package:om/Model/Admin/VehicleModel.dart';
 
+import '../../Api Service/Admin/VehicleService.dart';
+import '../../Model/Admin/VehicleModel.dart';
 class VehicleController extends GetxController {
   final VehicleService _vehicleService = VehicleService();
   var vehicleNo = ''.obs;

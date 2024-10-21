@@ -1,7 +1,7 @@
 // route_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:om/Controllers/Admin/route_controller.dart';
+import '../../Controllers/Admin/route_controller.dart';
 
 class RouteView extends StatelessWidget {
   final RouteController _controller = Get.put(RouteController());

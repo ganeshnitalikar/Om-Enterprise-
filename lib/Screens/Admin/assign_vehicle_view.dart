@@ -11,45 +11,84 @@ class AssignVehicleScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Assign Vehicle'),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Obx(() => DropdownButtonFormField<int>(
-                  value: controller.selectedEmployee.value,
-                  items: controller.employees,
-                  onChanged: (value) {
-                    controller.selectedEmployee.value = value!;
-                  },
-                  decoration: InputDecoration(labelText: 'Select Employee'),
-                )),
+            // Employee Dropdown
+            Obx(() {
+              if (controller.isLoadingEmployees.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return DropdownButtonFormField<int>(
+                value: controller.selectedEmployee.value == 0 ? null : controller.selectedEmployee.value,
+                items: controller.employees
+                    .map((employee) => DropdownMenuItem<int>(
+                          value: employee.id,
+                          child: Text(employee.label),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  controller.selectedEmployee.value = value ?? 0;
+                },
+                decoration: InputDecoration(labelText: 'Select Employee'),
+              );
+            }),
             SizedBox(height: 16),
-            Obx(() => DropdownButtonFormField<int>(
-                  value: controller.selectedVehicle.value,
-                  items: controller.vehicles,
-                  onChanged: (value) {
-                    controller.selectedVehicle.value = value!;
-                  },
-                  decoration: InputDecoration(labelText: 'Select Vehicle'),
-                )),
+
+            // Vehicle Dropdown
+            Obx(() {
+              if (controller.isLoadingVehicles.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return DropdownButtonFormField<int>(
+                value: controller.selectedVehicle.value == 0 ? null : controller.selectedVehicle.value,
+                items: controller.vehicles
+                    .map((vehicle) => DropdownMenuItem<int>(
+                          value: vehicle.id,
+                          child: Text(vehicle.label),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  controller.selectedVehicle.value = value ?? 0;
+                },
+                decoration: InputDecoration(labelText: 'Select Vehicle'),
+              );
+            }),
             SizedBox(height: 16),
-            Obx(() => DropdownButtonFormField<int>(
-                  value: controller.selectedRoute.value,
-                  items: controller.routes,
-                  onChanged: (value) {
-                    controller.selectedRoute.value = value!;
-                  },
-                  decoration: InputDecoration(labelText: 'Select Route'),
-                )),
+
+            // Route Dropdown
+            Obx(() {
+              if (controller.isLoadingRoutes.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+              return DropdownButtonFormField<int>(
+                value: controller.selectedRoute.value == 0 ? null : controller.selectedRoute.value,
+                items: controller.routes
+                    .map((route) => DropdownMenuItem<int>(
+                          value: route.id,
+                          child: Text(route.label),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  controller.selectedRoute.value = value ?? 0;
+                },
+                decoration: InputDecoration(labelText: 'Select Route'),
+              );
+            }),
             SizedBox(height: 16),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Enter Material Amount'),
-              keyboardType: TextInputType.number,
+
+            // Material Amount Input
+            TextField(
               onChanged: (value) {
                 controller.materialAmount.value = double.tryParse(value) ?? 0.0;
               },
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Enter Material Amount'),
             ),
             SizedBox(height: 16),
+
+            // Assign Vehicle Button
             ElevatedButton(
               onPressed: () {
                 controller.assignVehicle();
