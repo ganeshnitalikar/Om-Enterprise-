@@ -1,46 +1,50 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:om/Services/shared_preferences_service.dart';
+import 'dart:convert';
 
 class DriverExpenseController extends GetxController {
-  // Text editing controllers
-  TextEditingController expenseAmountController = TextEditingController();
-  TextEditingController detailsController = TextEditingController();
+  var date = ''.obs;
+  var amount = ''.obs;
+  var details = ''.obs;
 
-  // For handling the date input
-  Rx<DateTime?> selectedDate = Rx<DateTime?>(null);
+  Future<void> submitExpense() async {
+    int assignVehicleId = sharedPrefs.getAssignId();
+    int createdBy = sharedPrefs.getEmpId();
+    print('assignVehicleId: $assignVehicleId');
+    print('createdBy: $createdBy');
+    var requestBody = {
+      "assignVehicleId": {"id": assignVehicleId},
+      "expenseAmount": amount.value,
+      "reason": details.value,
+      "createdBy": createdBy
+    };
+    try {
+      var response = await http.post(
+        Uri.parse(
+            'http://139.59.7.147:7071/driverOperations/saveDriverExpenseAmount'),
+        headers: {
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(requestBody),
+      );
 
-  // Method to handle date picking
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
+      if (response.statusCode == 200) {
+        Get.snackbar('Success', 'Data saved successfully');
 
-    if (picked != null && picked != selectedDate.value) {
-      selectedDate.value = picked;
+        // Clear the form
+        date.value = '';
+        amount.value = '';
+        details.value = '';
+
+        // Refresh the driver dashboard
+        Get.offAllNamed('/driverDashboard');
+      } else {
+        Get.snackbar('Error', 'Failed to save data');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to save data');
     }
-  }
-
-  // Method to save expense data
-  void saveExpense() {
-    if (selectedDate.value == null) {
-      Get.snackbar('Error', 'Please select a date');
-      return;
-    }
-
-    if (expenseAmountController.text.isEmpty) {
-      Get.snackbar('Error', 'Please enter an expense amount');
-      return;
-    }
-
-    if (detailsController.text.isEmpty) {
-      Get.snackbar('Error', 'Please enter the expense details');
-      return;
-    }
-
-    // Process the data here (e.g., send to the server or save locally)
-    Get.snackbar('Success', 'Expense saved successfully!');
   }
 }

@@ -9,24 +9,24 @@ class ExpiryMaterialScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Expiry Material by Shop')),
+      appBar: AppBar(title: const Text('Expiry Material by Shop')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: controller.shopNameController,
-              decoration: InputDecoration(labelText: 'Shop Name'),
+              decoration: const InputDecoration(labelText: 'Shop Name'),
             ),
             TextField(
               controller: controller.totalAmountController,
-              decoration: InputDecoration(labelText: 'Total Amount'),
+              decoration: const InputDecoration(labelText: 'Total Amount'),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: controller.saveExpiryMaterial,
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         ),

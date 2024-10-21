@@ -24,28 +24,30 @@ class LoginController extends GetxController {
 
     try {
       final response = await apiService.login(username, password);
-      print("here");
 
       if (response['statusCode'] == 200) {
+        // Save token and role in shared preferences
         sharedPrefs.setToken(response['result']['token']);
         sharedPrefs.setEmployeeId(response['result']['employeeId']);
         sharedPrefs.setemployeeRole(response['result']['employeeRole']);
 
+        // Navigate based on employee role
         if (response['result']['employeeRole'] == 'Driver') {
           Get.offNamed('/driverDashboard', arguments: {
             'username': response['result']['userName'],
             'employeeId': response['result']['employeeId']
           });
         } else if (response['result']['employeeRole'] == 'Admin') {
-
           Get.offNamed('/adminDashboard', arguments: {
-
             'username': response['result']['userName'],
             'employeeId': response['result']['employeeId']
           });
         } else {
           Get.snackbar('Error', 'Invalid Employee Type');
         }
+
+        usernameController.clear();
+        passwordController.clear();
       } else {
         Get.snackbar('Login Failed', response['message']);
       }
@@ -54,5 +56,17 @@ class LoginController extends GetxController {
     } finally {
       isLoading(false);
     }
+  }
+
+  Future<void> logout() async {
+    await sharedPrefs.clearPreferences();
+    Get.toNamed('/login');
+  }
+
+  @override
+  void onClose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.onClose();
   }
 }

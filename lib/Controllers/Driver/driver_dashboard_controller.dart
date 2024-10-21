@@ -17,7 +17,7 @@ class DriverDashboardController extends GetxController {
 
   @override
   void onInit() {
-    fetchDriverDetails(2);
+    fetchDriverDetails(sharedPrefs.getEmpId());
     super.onInit();
   }
 
@@ -32,10 +32,11 @@ class DriverDashboardController extends GetxController {
       currentInVehicle.value = _parseDouble(result['Current In Vehicle']);
       totalDiscount.value = _parseDouble(result['Total Discount']);
       routeName.value = result['Route Name'];
-      assignId.value = result['Assign Id'];
       routeId.value = result['Route Id'];
+      assignId.value = result['Assign Id'];
 
       sharedPrefs.setRouteId(routeId.value);
+      sharedPrefs.setAssignId(assignId.value);
     } catch (e) {
       Get.snackbar("Error", "Failed to fetch driver details");
     } finally {

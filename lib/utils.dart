@@ -25,6 +25,31 @@ Widget submitButton({required String text, required Function onPressed}) {
   );
 }
 
+Widget myTextField(BuildContext context,
+    {required String label, required TextEditingController controller}) {
+  return Material(
+    elevation: 2,
+    borderRadius: BorderRadius.circular(8),
+    child: Container(
+      height: 49,
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width * .9,
+      decoration: const BoxDecoration(),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: label,
+            hintStyle: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 12,
+                color: Color.fromRGBO(0, 0, 0, 0.4))),
+      ),
+    ),
+  );
+}
+
 Widget pickMediaButton({required Function onPressed, required String text}) {
   return GestureDetector(
     onTap: () {

@@ -1,9 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:om/Controllers/Admin/add_employee_controller.dart';
-
-class AddEmployeeScreen extends StatelessWidget {
-  final AddEmployeeController controller = Get.put(AddEmployeeController());
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,28 +13,6 @@ class AddEmployeeController extends GetxController {
   var isActive = false.obs;
   File? selectedImage;
 
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final mobileNoController = TextEditingController();
-  final aadhaarNoController = TextEditingController();
-  final userNameController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  @override
-  void onInit() {
-    super.onInit();
-    fetchRoles();
-  }
-
-  // Fetch available roles from the API
-  Future<void> fetchRoles() async {
-    try {
-      roles.value = await _employeeService.fetchRoles();
-      print('Fetched roles: ${roles.value}');
-    } catch (e) {
-      print('Error fetching roles: $e');
-    }
-  }
 
   // Pick an image from gallery (mobile)
   Future<void> pickImage() async {
@@ -46,28 +25,6 @@ class AddEmployeeController extends GetxController {
       print('Selected image path: ${selectedImage?.path}');
     }
   }
-
-  // Save employee data and upload the image
-  Future<void> saveEmployee() async {
-    if (selectedRole.isEmpty) {
-      Get.snackbar('Error', 'Please select a role.');
-      return;
-    }
-
-    final newEmployee = {
-      "roleId": {
-        "id": int.parse(selectedRole.value),
-      },
-      "firstName": firstNameController.text,
-      "lastName": lastNameController.text,
-      "mobileNo": mobileNoController.text,
-      "aadhaarNo": aadhaarNoController.text,
-      "isActive": isActive.value,
-      "createdBy": 1,
-      "updatedBy": 1,
-      "userName": userNameController.text,
-      "password": passwordController.text,
-    };
 
     try {
       print('Saving employee with data: $newEmployee');
