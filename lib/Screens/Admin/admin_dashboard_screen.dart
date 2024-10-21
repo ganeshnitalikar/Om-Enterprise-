@@ -4,11 +4,12 @@ import 'package:om/Controllers/Admin/admin_dashboard_controller.dart';
 import 'package:om/Screens/Admin/EmployeeScreen.dart';
 import 'package:om/Screens/Admin/assign_vehicle_view.dart';
 import 'package:om/Screens/Admin/route_view.dart';
+import 'package:om/Screens/Admin/shop_screen.dart';
 import 'package:om/Screens/Admin/vehicle_view.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
-  final AdminDashboardController _controller =
-      Get.put(AdminDashboardController());
+
+  final AdminDashboardController _controller = Get.put(AdminDashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +79,7 @@ class AdminDashboardScreen extends StatelessWidget {
                         leading: Icon(Icons.store),
                         title: Text('Shop'),
                         onTap: () {
-                          // Navigate to Shop Page (to be implemented)
-                          // Get.to(() => ShopScreen());
+                          Get.to(ShopScreen());
                         },
                       ),
                       ListTile(
@@ -107,8 +107,7 @@ class AdminDashboardScreen extends StatelessWidget {
                 leading: Icon(Icons.directions_car_filled),
                 title: Text('Vehicle Assignment'),
                 onTap: () {
-                  // Navigate to Vehicle Assignment Page (to be implemented)
-                  // Get.to(() => VehicleAssignmentScreen());
+                  Get.to(() => AssignVehicleScreen());
                 },
               );
             } else {

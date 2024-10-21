@@ -1,51 +1,76 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:dio/dio.dart';
+import 'package:om/Model/Admin/assign_vehicle_model.dart';
+import 'package:om/Model/Admin/route.dart';
+
+import '../../Model/Admin/Vehicle.dart';
 
 class AssignVehicleService {
-  Dio dio = Dio(); // Initialize Dio for API calls
+  final Dio _dio = Dio();
 
-  // Fetch employees from backend
-  Future<List<dynamic>> fetchEmployees() async {
-    var response = await dio.post('http://139.59.7.147:7071/adminOperations/employeeDropDownForAssignVehicle', data: {});
-    if (response.statusCode == 200) {
-      return response.data['result'];
+  // Fetch employees
+  Future<List<AssignVehicleModel>> fetchEmployees() async {
+    try {
+      final response = await _dio.post(
+        'http://139.59.7.147:7071/adminOperations/employeeDropDownForAssignVehicle'
+      );
+      if (response.statusCode == 200) {
+        return (response.data['result'] as List)
+            .map((e) => AssignVehicleModel.fromJson(e))
+            .toList(); // Deserialize to Employee model
+      } else {
+        throw Exception('Failed to load employees');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
     }
-    return [];
   }
 
-  // Fetch vehicles from backend
-  Future<List<dynamic>> fetchVehicles() async {
-    var response = await dio.post('http://139.59.7.147:7071/adminOperations/vehicleDropDownForAssignVehicle', data: {});
-    if (response.statusCode == 200) {
-      return response.data['result'];
+  // Fetch vehicles
+  Future<List<Vehicle>> fetchVehicles() async {
+    try {
+      final response = await _dio.post(
+        'http://139.59.7.147:7071/adminOperations/vehicleDropDownForAssignVehicle'
+      );
+      if (response.statusCode == 200) {
+        return (response.data['result'] as List)
+            .map((v) => Vehicle.fromJson(v))
+            .toList(); // Deserialize to Vehicle model
+      } else {
+        throw Exception('Failed to load vehicles');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
     }
-    return [];
   }
 
-  // Fetch routes from backend
-  Future<List<dynamic>> fetchRoutes() async {
-    var response = await dio.post('http://139.59.7.147:7071/adminOperations/routeDropDownForAssignVehicle', data: {});
-    if (response.statusCode == 200) {
-      return response.data['result'];
+  // Fetch routes
+  Future<List<Route>> fetchRoutes() async {
+    try {
+      final response = await _dio.post(
+        'http://139.59.7.147:7071/adminOperations/routeDropDownForAssignVehicle'
+      );
+      if (response.statusCode == 200) {
+        return (response.data['result'] as List)
+            .map((r) => Route.fromJson(r))
+            .toList(); // Deserialize to Route model
+      } else {
+        throw Exception('Failed to load routes');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
     }
-    return [];
   }
 
   // Assign vehicle
-  Future<bool> assignVehicle(Map<String, dynamic> data) async {
+  Future<Map<String, dynamic>> assignVehicle(Map<String, dynamic> data) async {
     try {
-      final response = await dio.post('http://139.59.7.147:7071/adminOperations/assignVehicle', data: data);
-      if (response.statusCode == 200) {
-        return true; // Success
-      } else if (response.statusCode == 405) {
-        print('Method Not Allowed: ${response.statusCode}');
-        return false;
-      }
-    } on DioException catch (e) {
-      print('Dio Exception: ${e.message}');
-      return false; // Indicate failure
+      final response = await _dio.post(
+        'http://139.59.7.147:7071/adminOperations/assignVehicle',
+        data: data
+      );
+      return response.data;
+    } catch (e) {
+      throw Exception('Error: $e');
     }
-    return false; // Default case
   }
 }
