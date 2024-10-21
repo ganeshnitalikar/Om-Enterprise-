@@ -21,55 +21,52 @@ class ShopSalesScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Shop Name Search Field
-              TextField(
-                controller: controller.shopNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Shop Name',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  // Perform search on text change
-                  controller.performSearch(value);
-
-                  if (value.isEmpty) {
-                    controller.selectedShop.value =
-                        ''; // Clear selected shop when input is empty
-                    controller.searchResults.clear(); // Clear search results
-                  }
-                },
-              ),
-
-              const SizedBox(height: 8), // Add some spacing
-
-              // Dropdown for Search Results
-              Obx(() {
-                return DropdownButton<String>(
-                  hint: const Text('Select Shop'),
-                  value: controller.selectedShop.value.isNotEmpty
-                      ? controller.selectedShop.value
-                      : null,
-                  items: controller.searchResults.map((shopName) {
-                    return DropdownMenuItem<String>(
-                      value: shopName,
-                      child: Text(shopName),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) {
-                    controller.selectedShop.value =
-                        newValue ?? ''; // Assign selected shop to controller
-                    controller.shopNameController.text =
-                        controller.selectedShop.value; // Set the text field
-                    controller.searchResults
-                        .clear(); // Clear the dropdown after selection
-                  },
-                  isExpanded:
-                      true, // Make dropdown expand to fill available space
-                  underline: Container(
-                    height: 1,
-                    color: Colors.grey,
-                  ),
-                );
-              }),
+              Obx(() => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        controller: controller.shopNameController,
+                        onChanged: (value) {
+                          // Call the search function when user types
+                          controller.performSearch(value);
+                        },
+                        decoration: const InputDecoration(
+                          hintText: 'Start typing to search for a shop...',
+                          suffixIcon: Icon(Icons.search),
+                        ),
+                      ),
+                      if (controller.searchResults.isNotEmpty)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: controller.searchResults.length,
+                            itemBuilder: (context, index) {
+                              final shopLabel =
+                                  controller.searchResults[index]['label'];
+                              final shopId =
+                                  controller.searchResults[index]['id'];
+                              return ListTile(
+                                title: Text(shopLabel),
+                                onTap: () {
+                                  // Set the selected shop's label and store the shopId
+                                  controller.shopNameController.text =
+                                      shopLabel;
+                                  controller.selectedShopId = shopId;
+                                  controller.searchResults
+                                      .clear(); // Clear the dropdown
+                                  controller.update(); // Trigger UI update
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                    ],
+                  )),
 
               const SizedBox(height: 16),
 
@@ -91,13 +88,22 @@ class ShopSalesScreen extends StatelessWidget {
 
               // Cash Payment Method
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const Text('Cash',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       )),
-                  Expanded(
+                  Radio(
+                      groupValue: controller.isCash.value,
+                      value: controller.isCash.value,
+                      onChanged: (value) {
+                        controller.isCash = value as Rx<bool>;
+                        controller.update();
+                      }),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2 - 32,
                     child: TextField(
                       controller: controller.cashAmountController,
                       keyboardType: TextInputType.number,
@@ -107,19 +113,21 @@ class ShopSalesScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
                 ],
               ),
+              const SizedBox(height: 20),
 
               // Cheque Payment Method
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const Text('Cheque',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       )),
-                  Expanded(
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2 - 32,
                     child: TextField(
                       controller: controller.chequeAmountController,
                       keyboardType: TextInputType.number,
@@ -129,22 +137,36 @@ class ShopSalesScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: controller.pickChequeMedia,
-                    child: const Text('Add Cheque Photo'),
+                  GestureDetector(
+                    onTap: () => controller.pickChequeMedia(),
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: controller.chequeImage == null
+                          ? const Icon(Icons.camera_alt,
+                              size: 40) // Camera icon when no image
+                          : Image.file(controller.chequeImage!,
+                              fit: BoxFit.cover), // Display image when selected
+                    ),
                   ),
                 ],
               ),
-
+              const SizedBox(height: 20),
               // Online Payment Method
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const Text('Online',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       )),
-                  Expanded(
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2 - 32,
                     child: TextField(
                       controller: controller.onlineAmountController,
                       keyboardType: TextInputType.number,
@@ -154,15 +176,64 @@ class ShopSalesScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: controller.pickOnlineMedia,
-                    child: const Text('Add Online Receipt'),
+                  GestureDetector(
+                    onTap: () => controller.pickOnlineMedia(),
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: controller.onlineReceipt == null
+                          ? const Icon(Icons.camera_alt,
+                              size: 40) // Camera icon when no image
+                          : Image.file(controller.onlineReceipt!,
+                              fit: BoxFit.cover), // Display image when selected
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Text('Balance',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2 - 32,
+                    child: TextField(
+                      controller: controller.balanceController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Balance',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => controller.pickBalanceMedia(),
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: controller.balanceImage == null
+                          ? const Icon(Icons.camera_alt,
+                              size: 40) // Camera icon when no image
+                          : Image.file(controller.balanceImage!,
+                              fit: BoxFit.cover), // Display image when selected
+                    ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 16),
-
+              const SizedBox(height: 30),
               // Submit Button
               submitButton(
                   text: "Add Expense",
@@ -174,5 +245,13 @@ class ShopSalesScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget cameraButton({required Function onPressed}) {
+    return IconButton(
+        onPressed: () {
+          onPressed();
+        },
+        icon: const Icon(Icons.camera_alt));
   }
 }

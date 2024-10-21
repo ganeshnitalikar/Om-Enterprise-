@@ -8,6 +8,7 @@ import 'package:om/Screens/Admin/shop_screen.dart';
 import 'package:om/Screens/Admin/vehicle_view.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
+
   final AdminDashboardController _controller = Get.put(AdminDashboardController());
 
   @override
@@ -67,7 +68,7 @@ class AdminDashboardScreen extends StatelessWidget {
                         leading: Icon(Icons.person, color: Colors.greenAccent),
                         title: Text('Employee', style: TextStyle(fontSize: 16)),
                         onTap: () {
-                          Get.to(() => EmployeeScreen());
+                          Get.to(() => Placeholder());
                         },
                       ),
                       ListTile(

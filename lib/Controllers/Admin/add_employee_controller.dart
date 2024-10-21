@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,28 +14,6 @@ class AddEmployeeController extends GetxController {
   File? selectedImage;
  // var isLoading = false.obs; 
 
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final mobileNoController = TextEditingController();
-  final aadhaarNoController = TextEditingController();
-  final userNameController = TextEditingController();
-  final passwordController = TextEditingController();
-
-  @override
-  void onInit() {
-    super.onInit();
-    fetchRoles();
-  }
-
-  // Fetch available roles from the API
-  Future<void> fetchRoles() async {
-    try {
-      roles.value = await _employeeService.fetchRoles();
-      print('Fetched roles: ${roles.value}');
-    } catch (e) {
-      print('Error fetching roles: $e');
-    }
-  }
 
   Future<void> pickImage() async {
     final ImagePicker _picker = ImagePicker();

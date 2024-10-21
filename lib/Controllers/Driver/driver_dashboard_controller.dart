@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:om/Api%20Service/api_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:om/Services/api_service.dart';
+import 'package:om/Services/shared_preferences_service.dart';
 
 class DriverDashboardController extends GetxController {
   var isLoading = true.obs;
@@ -11,17 +11,13 @@ class DriverDashboardController extends GetxController {
   var totalDiscount = 0.0.obs;
   var totalMaterialReturnByShop = 0.obs;
   var routeName = ''.obs;
-  SharedPreferences? prefs;
+  var assignId = 0.obs;
   var routeId = 0.obs;
   final APIService apiService = APIService();
 
-  getSharedPreferences() async {
-    prefs = await apiService.getSharedPreferences();
-  }
-
   @override
   void onInit() {
-    fetchDriverDetails(2);
+    fetchDriverDetails(sharedPrefs.getEmpId());
     super.onInit();
   }
 
@@ -29,7 +25,6 @@ class DriverDashboardController extends GetxController {
     try {
       isLoading(true);
       var result = await apiService.fetchDriverDetails(driverId);
-      print("Result: $result");
 
       totalMaterial.value = _parseDouble(result['Total Material']);
       totalSale.value = _parseDouble(result['Total Sale']);
@@ -37,14 +32,12 @@ class DriverDashboardController extends GetxController {
       currentInVehicle.value = _parseDouble(result['Current In Vehicle']);
       totalDiscount.value = _parseDouble(result['Total Discount']);
       routeName.value = result['Route Name'];
+      routeId.value = result['Route Id'];
+      assignId.value = result['Assign Id'];
 
-      // routeId.value = result['Route ID'];
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs?.setInt('routeId', routeId.value);
-
-      // totalMaterialReturnByShop.value = 0;
+      sharedPrefs.setRouteId(routeId.value);
+      sharedPrefs.setAssignId(assignId.value);
     } catch (e) {
-      print("Error in driver dashboard controller: $e");
       Get.snackbar("Error", "Failed to fetch driver details");
     } finally {
       isLoading(false);
