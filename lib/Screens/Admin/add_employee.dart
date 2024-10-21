@@ -1,9 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:om/Controllers/Admin/add_employee_controller.dart';
+
+class AddEmployeeScreen extends StatelessWidget {
+  final AddEmployeeController controller = Get.put(AddEmployeeController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Employee', style: TextStyle(fontWeight: FontWeight.bold)),
+        title:
+            Text('Add Employee', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.teal, // AppBar color customization
         centerTitle: true,
       ),
@@ -27,25 +34,25 @@
 
             // Dropdown to select Role
             Obx(() => DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                labelText: 'Select Role',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              value: controller.selectedRole.value.isNotEmpty
-                  ? controller.selectedRole.value
-                  : null,
-              onChanged: (value) {
-                controller.selectedRole.value = value ?? '';
-              },
-              items: controller.roles.map((role) {
-                return DropdownMenuItem<String>(
-                  value: role['id'].toString(),
-                  child: Text(role['label']),
-                );
-              }).toList(),
-            )),
+                  decoration: InputDecoration(
+                    labelText: 'Select Role',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  value: controller.selectedRole.value.isNotEmpty
+                      ? controller.selectedRole.value
+                      : null,
+                  onChanged: (value) {
+                    controller.selectedRole.value = value ?? '';
+                  },
+                  items: controller.roles.map((role) {
+                    return DropdownMenuItem<String>(
+                      value: role['id'].toString(),
+                      child: Text(role['label']),
+                    );
+                  }).toList(),
+                )),
             SizedBox(height: 20),
 
             // First Name and Last Name Fields
@@ -108,7 +115,8 @@
               icon: Icon(Icons.upload_file),
               label: Text('Upload Photo'),
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50), backgroundColor: Colors.teal,
+                minimumSize: Size(double.infinity, 50),
+                backgroundColor: Colors.teal,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -154,14 +162,14 @@
 
             // Active Checkbox
             Obx(() => CheckboxListTile(
-              title: Text('Active'),
-              value: controller.isActive.value,
-              onChanged: (val) {
-                controller.isActive.value = val ?? false;
-              },
-              activeColor: Colors.teal,
-              controlAffinity: ListTileControlAffinity.leading,
-            )),
+                  title: Text('Active'),
+                  value: controller.isActive.value,
+                  onChanged: (val) {
+                    controller.isActive.value = val ?? false;
+                  },
+                  activeColor: Colors.teal,
+                  controlAffinity: ListTileControlAffinity.leading,
+                )),
             SizedBox(height: 30),
 
             // Save Button
@@ -174,7 +182,8 @@
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50), backgroundColor: Colors.teal,
+                minimumSize: Size(double.infinity, 50),
+                backgroundColor: Colors.teal,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

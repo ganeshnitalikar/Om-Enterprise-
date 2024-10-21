@@ -14,24 +14,27 @@ class DriverDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Get.theme.colorScheme.background,
+      appBar: AppBar(
+        backgroundColor: Get.theme.colorScheme.onBackground,
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Get.theme.colorScheme.primary,
               ),
               child: Text('Menu',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                  )),
+                  style: Get.theme.textTheme.headlineLarge!
+                      .copyWith(color: Get.theme.colorScheme.onPrimary)),
             ),
             ListTile(
               leading: const Icon(Icons.dashboard),
-              title: const Text('Dashboard'),
+              title: Text('Dashboard',
+                  style: Get.theme.textTheme.bodyLarge!
+                      .copyWith(color: Get.theme.colorScheme.tertiary)),
               onTap: () {},
             ),
             ListTile(
@@ -40,7 +43,7 @@ class DriverDashboard extends StatelessWidget {
               onTap: () {
                 if (controller.assignId.value != 0 &&
                     controller.routeId.value != 0) {
-                  Get.toNamed('/shopSales');
+                  Get.toNamed('/driverShopSales');
                 } else {
                   Get.snackbar("Error", "Route not assigned");
                 }
@@ -61,14 +64,32 @@ class DriverDashboard extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.report),
               title: const Text('Report'),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed('/driverReport');
+              },
             ),
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
-                APIService().logout();
-                Get.offAllNamed('/login');
+                Get.snackbar(
+                    "Confirm Logout", "Are You Sure You Want To Logout?",
+                    snackPosition: SnackPosition.TOP,
+                    margin: const EdgeInsets.all(20),
+                    backgroundColor: Colors.white,
+                    colorText: Colors.black,
+                    duration: const Duration(seconds: 5),
+                    mainButton: TextButton(
+                      onPressed: () {
+                        APIService().logout();
+                        Get.offAllNamed('/login');
+                        Get.back();
+                      },
+                      child: const Text(
+                        'Yes',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ));
               },
             ),
           ],
@@ -93,7 +114,7 @@ class DriverDashboard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         const Text("Welcome,", style: TextStyle(fontSize: 22)),
-                        Text(username,
+                        Text(sharedPrefs.getEmployeeName(),
                             style: const TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.bold)),
                       ],

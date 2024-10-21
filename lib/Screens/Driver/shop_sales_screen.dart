@@ -53,7 +53,6 @@ class ShopSalesScreen extends StatelessWidget {
                               return ListTile(
                                 title: Text(shopLabel),
                                 onTap: () {
-                                  // Set the selected shop's label and store the shopId
                                   controller.shopNameController.text =
                                       shopLabel;
                                   controller.selectedShopId = shopId;
@@ -87,159 +86,134 @@ class ShopSalesScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Cash Payment Method
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Text('Cash',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  Radio(
-                      groupValue: controller.isCash.value,
-                      value: controller.isCash.value,
-                      onChanged: (value) {
-                        controller.isCash = value as Rx<bool>;
-                        controller.update();
-                      }),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2 - 32,
-                    child: TextField(
-                      controller: controller.cashAmountController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Cash Amount',
-                        border: OutlineInputBorder(),
+              Obx(
+                () {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          controller.isCash.value = !controller.isCash.value;
+                          // Disable other payment methods if cash is selected
+                          if (controller.isCash.value) {
+                            controller.clearImages();
+                          }
+                          controller.update();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                            color: controller.isCash.value
+                                ? Colors.green
+                                : Colors.blue,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const Text('Cash',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              )),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                      if (controller.isCash.value) ...[
+                        SizedBox(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width * .5,
+                          child: TextField(
+                            controller: controller.cashAmountController,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Cash Amount',
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  );
+                },
               ),
+              const SizedBox(height: 20),
+              // Cheque Payment Method
+
+              PaymentMethodWidget(
+                title: 'Cheque',
+                controller: controller.chequeAmountController,
+                isSelected: controller.isCheque,
+                onSelect: () {
+                  controller.isCheque.value = !controller.isCheque.value;
+                  if (controller.isCheque.value) {
+                    controller.clearImages();
+                  }
+                  controller.update();
+                },
+                labelText: 'Cheque Amount',
+              ),
+
               const SizedBox(height: 20),
 
-              // Cheque Payment Method
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Text('Cheque',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2 - 32,
-                    child: TextField(
-                      controller: controller.chequeAmountController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Cheque Amount',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => controller.pickChequeMedia(),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: controller.chequeImage == null
-                          ? const Icon(Icons.camera_alt,
-                              size: 40) // Camera icon when no image
-                          : Image.file(controller.chequeImage!,
-                              fit: BoxFit.cover), // Display image when selected
-                    ),
-                  ),
-                ],
+// Online Payment Method
+              PaymentMethodWidget(
+                title: 'Online',
+                controller: controller.onlineAmountController,
+                isSelected: controller.isOnline,
+                onSelect: () {
+                  controller.isOnline.value = !controller.isOnline.value;
+                  if (controller.isOnline.value) {
+                    controller.clearImages();
+                  }
+                  controller.update();
+                },
+                labelText: 'Online Amount',
               ),
+
               const SizedBox(height: 20),
-              // Online Payment Method
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Text('Online',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2 - 32,
-                    child: TextField(
-                      controller: controller.onlineAmountController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Online Amount',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => controller.pickOnlineMedia(),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: controller.onlineReceipt == null
-                          ? const Icon(Icons.camera_alt,
-                              size: 40) // Camera icon when no image
-                          : Image.file(controller.onlineReceipt!,
-                              fit: BoxFit.cover), // Display image when selected
-                    ),
-                  ),
-                ],
+
+// Balance Payment Method
+              PaymentMethodWidget(
+                title: 'Balance',
+                controller: controller.balanceController,
+                isSelected: controller.isBalance,
+                onSelect: () {
+                  controller.isBalance.value = !controller.isBalance.value;
+                  if (controller.isBalance.value) {
+                    controller.clearImages();
+                  }
+                  controller.update();
+                },
+                labelText: 'Balance Amount',
               ),
+
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  const Text('Balance',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2 - 32,
-                    child: TextField(
-                      controller: controller.balanceController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Balance',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => controller.pickBalanceMedia(),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: controller.balanceImage == null
-                          ? const Icon(Icons.camera_alt,
-                              size: 40) // Camera icon when no image
-                          : Image.file(controller.balanceImage!,
-                              fit: BoxFit.cover), // Display image when selected
-                    ),
-                  ),
-                ],
+
+// Discount Field
+              PaymentMethodWidget(
+                title: 'Discount',
+                controller: controller.discountController,
+                isSelected: controller.isDiscount,
+                onSelect: () {
+                  controller.isDiscount.value = !controller.isDiscount.value;
+                  if (controller.isDiscount.value) {
+                    controller.clearImages();
+                  }
+                  controller.update();
+                },
+                labelText: 'Discount Amount',
               ),
 
               const SizedBox(height: 30),
               // Submit Button
               submitButton(
-                  text: "Add Expense",
-                  onPressed: () {
-                    controller.saveSalesInfo();
-                  }),
+                text: "Add Expense",
+                onPressed: () {
+                  controller.saveSalesInfo();
+                },
+              ),
             ],
           ),
         ),
@@ -249,9 +223,96 @@ class ShopSalesScreen extends StatelessWidget {
 
   Widget cameraButton({required Function onPressed}) {
     return IconButton(
-        onPressed: () {
-          onPressed();
-        },
-        icon: const Icon(Icons.camera_alt));
+      onPressed: () {
+        onPressed();
+      },
+      icon: const Icon(Icons.camera_alt),
+    );
+  }
+}
+
+class PaymentMethodWidget extends StatelessWidget {
+  final String title;
+  final TextEditingController controller;
+  final Rx<bool> isSelected;
+  final Function onSelect;
+  final String labelText;
+
+  const PaymentMethodWidget({
+    super.key,
+    required this.title,
+    required this.controller,
+    required this.isSelected,
+    required this.onSelect,
+    required this.labelText,
+  });
+
+  ShopSalesController get screencontroller => Get.find<ShopSalesController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              onSelect();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                color: isSelected.value ? Colors.green : Colors.blue,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          isSelected.value
+              ? Flexible(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * .5,
+                        child: TextField(
+                          controller: controller,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: labelText,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          screencontroller.pickMedia();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.camera_alt, size: 40),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox(),
+        ],
+      );
+    });
   }
 }

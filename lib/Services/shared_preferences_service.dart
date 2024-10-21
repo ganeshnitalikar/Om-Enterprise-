@@ -31,6 +31,14 @@ class SharedPrefs {
     _sharedPrefs.setInt('assignId', assignId);
   }
 
+  setEmployeeName(String employeeName) {
+    _sharedPrefs.setString('employeeName', employeeName);
+  }
+
+  String getEmployeeName() {
+    return _sharedPrefs.getString('employeeName') ?? '';
+  }
+
   int getEmpId() {
     return _sharedPrefs.getInt('employeeId') ?? 0;
   }

@@ -9,7 +9,7 @@ class AssignVehicleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Assign Vehicle'),
+        title: const Text('Assign Vehicle'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -18,7 +18,7 @@ class AssignVehicleScreen extends StatelessWidget {
             // Employee Dropdown
             Obx(() {
               if (controller.isLoadingEmployees.value) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
               return DropdownButtonFormField<int>(
                 value: controller.selectedEmployee.value == 0 ? null : controller.selectedEmployee.value,
@@ -31,15 +31,15 @@ class AssignVehicleScreen extends StatelessWidget {
                 onChanged: (value) {
                   controller.selectedEmployee.value = value ?? 0;
                 },
-                decoration: InputDecoration(labelText: 'Select Employee'),
+                decoration: const InputDecoration(labelText: 'Select Employee'),
               );
             }),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Vehicle Dropdown
             Obx(() {
               if (controller.isLoadingVehicles.value) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
               return DropdownButtonFormField<int>(
                 value: controller.selectedVehicle.value == 0 ? null : controller.selectedVehicle.value,
@@ -52,15 +52,15 @@ class AssignVehicleScreen extends StatelessWidget {
                 onChanged: (value) {
                   controller.selectedVehicle.value = value ?? 0;
                 },
-                decoration: InputDecoration(labelText: 'Select Vehicle'),
+                decoration: const InputDecoration(labelText: 'Select Vehicle'),
               );
             }),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Route Dropdown
             Obx(() {
               if (controller.isLoadingRoutes.value) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
               return DropdownButtonFormField<int>(
                 value: controller.selectedRoute.value == 0 ? null : controller.selectedRoute.value,
@@ -73,10 +73,10 @@ class AssignVehicleScreen extends StatelessWidget {
                 onChanged: (value) {
                   controller.selectedRoute.value = value ?? 0;
                 },
-                decoration: InputDecoration(labelText: 'Select Route'),
+                decoration: const InputDecoration(labelText: 'Select Route'),
               );
             }),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Material Amount Input
             TextField(
@@ -84,16 +84,16 @@ class AssignVehicleScreen extends StatelessWidget {
                 controller.materialAmount.value = double.tryParse(value) ?? 0.0;
               },
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Enter Material Amount'),
+              decoration: const InputDecoration(labelText: 'Enter Material Amount'),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Assign Vehicle Button
             ElevatedButton(
               onPressed: () {
                 controller.assignVehicle();
               },
-              child: Text('Assign Vehicle'),
+              child: const Text('Assign Vehicle'),
             ),
           ],
         ),

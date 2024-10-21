@@ -6,6 +6,8 @@ class ExpiryMaterialScreen extends StatelessWidget {
   final ExpiryMaterialController controller =
       Get.put(ExpiryMaterialController());
 
+   ExpiryMaterialScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

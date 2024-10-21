@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,8 +11,14 @@ class AddEmployeeController extends GetxController {
   var selectedRole = ''.obs;
   var isActive = false.obs;
   File? selectedImage;
- // var isLoading = false.obs; 
+  // var isLoading = false.obs;
 
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final mobileNoController = TextEditingController();
+  final aadhaarNoController = TextEditingController();
+  final userNameController = TextEditingController();
+  final passwordController = TextEditingController();
 
   Future<void> pickImage() async {
     final ImagePicker _picker = ImagePicker();
@@ -27,7 +32,7 @@ class AddEmployeeController extends GetxController {
 
   // Save employee data and upload the image
   Future<void> saveEmployee() async {
-   //  isLoading.value = true;
+    //  isLoading.value = true;
     if (selectedRole.isEmpty) {
       Get.snackbar('Error', 'Please select a role.');
       return;
@@ -50,9 +55,10 @@ class AddEmployeeController extends GetxController {
 
     try {
       print('Saving employee with data: $newEmployee');
-     // await Future.delayed(Duration(seconds: 2));
+      // await Future.delayed(Duration(seconds: 2));
       // Save employee with the selected image
-      await _employeeService.saveEmployee(newEmployee, imageFile: selectedImage);
+      await _employeeService.saveEmployee(newEmployee,
+          imageFile: selectedImage);
       Get.snackbar('Success', 'Employee saved successfully');
     } catch (e) {
       print('Error saving employee: $e');

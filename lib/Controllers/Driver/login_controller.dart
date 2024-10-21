@@ -29,6 +29,7 @@ class LoginController extends GetxController {
         // Save token and role in shared preferences
         sharedPrefs.setToken(response['result']['token']);
         sharedPrefs.setEmployeeId(response['result']['employeeId']);
+        sharedPrefs.setUsername(response['result']['userName']);
         sharedPrefs.setemployeeRole(response['result']['employeeRole']);
 
         // Navigate based on employee role

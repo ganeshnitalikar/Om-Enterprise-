@@ -10,6 +10,7 @@ class DriverDashboardController extends GetxController {
   var currentInVehicle = 0.0.obs;
   var totalDiscount = 0.0.obs;
   var totalMaterialReturnByShop = 0.obs;
+  var name = ''.obs;
   var routeName = ''.obs;
   var assignId = 0.obs;
   var routeId = 0.obs;
@@ -17,7 +18,9 @@ class DriverDashboardController extends GetxController {
 
   @override
   void onInit() {
-    fetchDriverDetails(sharedPrefs.getEmpId());
+    if (sharedPrefs.getEmpId() != 0) {
+      fetchDriverDetails(sharedPrefs.getEmpId());
+    }
     super.onInit();
   }
 
@@ -31,14 +34,20 @@ class DriverDashboardController extends GetxController {
       totalExpense.value = _parseDouble(result['Total Expense']);
       currentInVehicle.value = _parseDouble(result['Current In Vehicle']);
       totalDiscount.value = _parseDouble(result['Total Discount']);
+      name.value = result['Employee Name'];
       routeName.value = result['Route Name'];
       routeId.value = result['Route Id'];
       assignId.value = result['Assign Id'];
 
       sharedPrefs.setRouteId(routeId.value);
+      sharedPrefs.setEmployeeName(name.value);
       sharedPrefs.setAssignId(assignId.value);
     } catch (e) {
-      Get.snackbar("Error", "Failed to fetch driver details");
+      if (routeId.value == 0) {
+        Get.snackbar("No Data To Show", "Driver Not Assigned Yet");
+      } else {
+        Get.snackbar("Error", "Failed to fetch driver details");
+      }
     } finally {
       isLoading(false);
     }

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +12,13 @@ class EmployeeController extends GetxController {
   var selectedRole = ''.obs;
   var isActive = false.obs;
   File? selectedImage; // Only for mobile platform
+
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final mobileNoController = TextEditingController();
+  final aadhaarNoController = TextEditingController();
+  final userNameController = TextEditingController();
+  final passwordController = TextEditingController();
 
   // Pick an image from the gallery (mobile)
   Future<void> pickImage() async {
@@ -39,15 +45,15 @@ class EmployeeController extends GetxController {
     return true; // Validation passed
   }
 
-    try {
-      print('Saving employee with data: $newEmployee');
-      await _employeeService.saveEmployee(newEmployee, selectedImage as String); // Pass only the image
-      Get.snackbar('Success', 'Employee saved successfully');
-      return true; // Return true on success
-    } catch (e) {
-      print('Error saving employee: $e');
-      Get.snackbar('Error', 'Failed to save employee');
-      return false; // Return false on failure
-    }
-  }
-
+  //   try {
+  //     print('Saving employee with data: $newEmployee');
+  //     await _employeeService.saveEmployee(newEmployee, selectedImage as String); // Pass only the image
+  //     Get.snackbar('Success', 'Employee saved successfully');
+  //     return true; // Return true on success
+  //   } catch (e) {
+  //     print('Error saving employee: $e');
+  //     Get.snackbar('Error', 'Failed to save employee');
+  //     return false; // Return false on failure
+  //   }
+  // }
+}

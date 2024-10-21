@@ -27,6 +27,7 @@ class APIService {
     );
 
     if (response.statusCode == 200) {
+      print("login  success");
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to login');
@@ -47,6 +48,7 @@ class APIService {
     );
 
     if (response.statusCode == 200) {
+      print("fetched");
       return jsonDecode(response.body)['result'];
     } else {
       throw Exception('Failed');
