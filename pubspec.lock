@@ -53,10 +53,17 @@ packages:
     dependency: transitive
     description:
       name: crypto
+<<<<<<< HEAD
+      sha256: "1e445881f28f22d6140f181e07737b22f1e099a5e1ff94b0af2f9e4a463f4855"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.6"
+=======
       sha256: ff625774173754681d66daaf4a448684fb04b78f902da9cb3d308c19cc5e8bab
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
   dio:
     dependency: "direct main"
     description:
@@ -348,10 +355,17 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
+<<<<<<< HEAD
+      sha256: c464428172cb986b758c6d1724c603097febb8fb855aa265aeecc9280c294d4a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.12"
+=======
       sha256: a248d8146ee5983446bf03ed5ea8f6533129a12b11f12057ad1b4a67a2b3b41d
       url: "https://pub.dev"
     source: hosted
     version: "2.2.4"
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
   path_provider_foundation:
     dependency: transitive
     description:
@@ -558,5 +572,10 @@ packages:
     source: hosted
     version: "1.1.0"
 sdks:
+<<<<<<< HEAD
+  dart: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
+=======
   dart: ">=3.3.0 <4.0.0"
   flutter: ">=3.19.2"
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5

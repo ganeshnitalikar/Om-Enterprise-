@@ -1,7 +1,4 @@
 import 'package:get/get.dart';
-import 'package:om/Model/Admin/Vehicle.dart';
-import 'package:om/Model/Admin/assign_vehicle_model.dart';
-import 'package:om/Model/Admin/route.dart';
 import '../../Api Service/Admin/assign_vehicle_service.dart';
 
 class AssignVehicleController extends GetxController {
@@ -16,9 +13,9 @@ class AssignVehicleController extends GetxController {
   var selectedRoute = 0.obs;
   var materialAmount = 0.0.obs;
 
-  var employees = <AssignVehicleModel>[].obs; // Changed to use Employee model
-  var vehicles = <Vehicle>[].obs; // Changed to use Vehicle model
-  var routes = <Route>[].obs; // Changed to use Route model
+  var employees = <Map<String, dynamic>>[].obs; 
+  var vehicles = <Map<String, dynamic>>[].obs; 
+  var routes = <Map<String, dynamic>>[].obs; 
 
   @override
   void onInit() {
@@ -33,7 +30,7 @@ class AssignVehicleController extends GetxController {
     try {
       final response = await service.fetchEmployees();
       if (response.isNotEmpty) {
-        employees.value = response.map((e) => AssignVehicleModel.fromJson(e as Map<String, dynamic>)).toList(); // Assuming Employee model has fromJson
+        employees.value = response; // Directly assigning raw data
       }
     } catch (error) {
       print('Error fetching employees: $error'); // Handle the error
@@ -47,7 +44,7 @@ class AssignVehicleController extends GetxController {
     try {
       final response = await service.fetchVehicles();
       if (response.isNotEmpty) {
-        vehicles.value = response.map((v) => Vehicle.fromJson(v as Map<String, dynamic>)).toList(); // Assuming Vehicle model has fromJson
+        vehicles.value = response; // Directly assigning raw data
       }
     } catch (error) {
       print('Error fetching vehicles: $error'); // Handle the error
@@ -61,7 +58,7 @@ class AssignVehicleController extends GetxController {
     try {
       final response = await service.fetchRoutes();
       if (response.isNotEmpty) {
-        routes.value = response.map((r) => Route.fromJson(r as Map<String, dynamic>)).toList(); // Assuming Route model has fromJson
+        routes.value = response; // Directly assigning raw data
       }
     } catch (error) {
       print('Error fetching routes: $error'); // Handle the error
@@ -70,21 +67,48 @@ class AssignVehicleController extends GetxController {
     }
   }
 
-  void assignVehicle() async {
-    // Prepare data for assignment
-    final data = {
-      'employeeId': selectedEmployee.value,
-      'vehicleId': selectedVehicle.value,
-      'routeId': selectedRoute.value,
-      'totalMaterial': materialAmount.value,
-      'assignById': 'your-assigner-id' // Provide this as per your requirements
-    };
-
-    try {
-      final result = await service.assignVehicle(data);
-      print('Vehicle assigned: $result'); // Handle the response as needed
-    } catch (error) {
-      print('Error assigning vehicle: $error'); // Handle the error
-    }
+Future<void> assignVehicle() async {
+  // Validate the input fields before sending the request
+  if (selectedEmployee.value == 0 ||
+      selectedVehicle.value == 0 ||
+      selectedRoute.value == 0 ||
+      materialAmount.value <= 0) {
+    Get.snackbar('Error', 'Please select all fields and enter a valid material amount');
+    return;
   }
+
+  // Construct the payload according to the expected format
+  final Map<String, dynamic> data = {
+    'employeeId': {'id': selectedEmployee.value},
+    'vehicleId': {'id': selectedVehicle.value},
+    'routeId': {'id': selectedRoute.value},
+    'totalMaterial': materialAmount.value,
+    'assignById': {'id': 1} // Assuming this is static or you can modify accordingly
+  };
+
+  print('Payload: $data'); // Log the payload for debugging
+
+  try {
+    // Call the assign vehicle service method with the constructed payload
+    final result = await AssignVehicleService().assignVehicle(data);
+    print('API Response: $result'); // Log the response for debugging
+
+    // Check for errors in the API response
+    if (result['error'] == true) {
+      Get.snackbar('Error', result['message']);
+    } else {
+      Get.snackbar('Success', 'Vehicle assigned successfully');
+    }
+  } catch (e) {
+    print('Exception: $e'); // Log any exceptions for debugging
+    Get.snackbar('Error', 'Failed to assign vehicle: $e');
+  }
+}
+
+@override
+void onClose() {
+    super.onClose();
+    
+  }
+
 }

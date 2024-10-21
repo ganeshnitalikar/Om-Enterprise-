@@ -1,6 +1,16 @@
+<<<<<<< HEAD
+// ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:om/Screens/Admin/add_employee.dart';
+import 'package:om/Utils/themes.dart';
+
+
+=======
+
+import 'package:flutter/material.dart';
+import 'package:om/Screens/Admin/add_employee.dart';
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
 import '../../Api Service/Admin/employee_service.dart';
 
 class EmployeeScreen extends StatefulWidget {
@@ -54,7 +64,11 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
               SizedBox(height: 10),
               Text(
                 'Update Employee',
+<<<<<<< HEAD
+                style: Themes.light.textTheme.headlineMedium,
+=======
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
               ),
               SizedBox(height: 20),
               Form(
@@ -178,8 +192,14 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
+        title: Text('Employees',style: Themes.light.textTheme.headlineSmall,),
+        backgroundColor: Themes.light.colorScheme.background,
+        actions: [
+=======
         title: Text('Employees'),
           actions: [
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
           IconButton(
             icon: Icon(Icons.add),
             onPressed: _navigateToAddEmployee,

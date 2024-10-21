@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Admin/admin_dashboard_controller.dart';
@@ -6,6 +8,7 @@ import 'package:om/Screens/Admin/assign_vehicle_view.dart';
 import 'package:om/Screens/Admin/route_view.dart';
 import 'package:om/Screens/Admin/shop_screen.dart';
 import 'package:om/Screens/Admin/vehicle_view.dart';
+import 'package:om/Utils/themes.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
 
@@ -15,9 +18,14 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
+        title: Text('Admin Dashboard',style: Themes.light.textTheme.headlineMedium,),
+        backgroundColor: Themes.light.colorScheme.background
+=======
         title: Text('Admin Dashboard'),
         backgroundColor: Colors.blueAccent,
         elevation: 0,
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
       ),
       drawer: _buildDrawer(context),
       body: Obx(() {
@@ -43,7 +51,11 @@ class AdminDashboardScreen extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
+<<<<<<< HEAD
+              color:Themes.light.colorScheme.background,
+=======
               color: Colors.blueAccent,
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
             ),
             child: Text(
               'Admin Menu',

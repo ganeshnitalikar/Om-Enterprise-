@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Driver/shop_sales_controller.dart';
-import 'package:om/utils.dart';
+import 'package:om/Utils/utils.dart';
 
 class ShopSalesScreen extends StatelessWidget {
   final ShopSalesController controller = Get.put(ShopSalesController());

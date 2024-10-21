@@ -1,5 +1,12 @@
+<<<<<<< HEAD
+// route_view.dart
+// ignore_for_file: deprecated_member_use
+
+=======
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:om/Utils/themes.dart';
 import '../../Controllers/Admin/route_controller.dart';
 
 class RouteView extends StatelessWidget {
@@ -9,6 +16,10 @@ class RouteView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
+        title: Text('Route Management',style: Themes.light.textTheme.headlineSmall,),
+        backgroundColor: Themes.light.colorScheme.background
+=======
         title: Text(
           'Route Management',
           style: TextStyle(
@@ -20,6 +31,7 @@ class RouteView extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
         elevation: 0,
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

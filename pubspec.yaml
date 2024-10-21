@@ -15,7 +15,10 @@ dependencies:
   shared_preferences: ^2.2.3
   universal_platform: ^1.0.0+1
   dio: ^5.0.0
+<<<<<<< HEAD
+=======
   intl: ^0.18.1
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
   google_fonts: ^6.2.1
 
 dev_dependencies:

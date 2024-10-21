@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:om/Utils/themes.dart';
 import '../../Api Service/Admin/shop_service.dart';
 import '../../Model/Admin/shop.dart';
 
@@ -65,8 +68,13 @@ class _ShopScreenState extends State<ShopScreen> {
 
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
+        title: Text('Shop Management',style: Themes.light.textTheme.headlineSmall,),
+        backgroundColor: Themes.light.colorScheme.background
+=======
         title: Text('Shop Management'),
         backgroundColor: primaryColor,
+>>>>>>> 49698c5286fc4adadd4cb6a4d37e293808b90be5
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
