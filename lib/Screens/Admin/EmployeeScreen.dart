@@ -1,5 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:om/Screens/Admin/add_employee.dart';
+import 'package:om/Utils/themes.dart';
 
 
 import '../../Api Service/Admin/employee_service.dart';
@@ -50,7 +53,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
             children: [
               Text(
                 'Update Employee',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: Themes.light.textTheme.headlineMedium,
               ),
               SizedBox(height: 10),
               Form(
@@ -175,7 +178,8 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Employees'),
+        title: Text('Employees',style: Themes.light.textTheme.headlineSmall,),
+        backgroundColor: Themes.light.colorScheme.background,
         actions: [
           IconButton(
             icon: Icon(Icons.add),

@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:om/Utils/themes.dart';
 import '../../Api Service/Admin/shop_service.dart';
 import '../../Model/Admin/shop.dart';
 
@@ -60,7 +63,8 @@ class _ShopScreenState extends State<ShopScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shop Management'),
+        title: Text('Shop Management',style: Themes.light.textTheme.headlineSmall,),
+        backgroundColor: Themes.light.colorScheme.background
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
