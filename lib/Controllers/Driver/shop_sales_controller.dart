@@ -67,7 +67,7 @@ class ShopSalesController extends GetxController {
       isCheque.value = false;
       isOnline.value = false;
       isBalance.value = false;
-      
+
       isDiscount.value = false;
       onlineAmountController.clear();
       discountController.clear();
@@ -80,7 +80,7 @@ class ShopSalesController extends GetxController {
       isCash.value = false;
       isOnline.value = false;
       isBalance.value = false;
-      
+
       isDiscount.value = false;
 
       cashAmountController.clear();
@@ -253,10 +253,12 @@ class ShopSalesController extends GetxController {
 
       if (response.statusCode == 200) {
         Get.snackbar("Success", "Sales info saved successfully!");
+        Get.offAllNamed('/driverDashboard');
       } else {
         final responseBody = jsonDecode(response.body);
         Get.snackbar(
             "Error", responseBody['error'] ?? "Unknown error occurred");
+        Get.offAllNamed('/driverDashboard');
       }
     } catch (e) {
       Get.snackbar("Error Here", e.toString());

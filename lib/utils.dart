@@ -92,7 +92,6 @@ Widget inputField(
   );
 }
 
-/// Created by Patrice Mulindi email(mulindipatrice00@gmail.com) on 23.06.2023.
 class Themes {
   static final light = ThemeData.light().copyWith(
     scaffoldBackgroundColor: Colors.white,

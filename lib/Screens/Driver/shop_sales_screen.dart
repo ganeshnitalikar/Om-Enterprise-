@@ -27,10 +27,14 @@ class ShopSalesScreen extends StatelessWidget {
                       TextField(
                         controller: controller.shopNameController,
                         onChanged: (value) {
-                          // Call the search function when user types
                           controller.performSearch(value);
+                          controller.isDiscount.value = true;
                         },
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
+                          labelText: 'Shop Name',
+                          labelStyle: Get.theme.textTheme.labelLarge!.copyWith(
+                            color: Colors.black,
+                          ),
                           hintText: 'Start typing to search for a shop...',
                           suffixIcon: Icon(Icons.search),
                         ),
@@ -69,15 +73,14 @@ class ShopSalesScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Total Amount Field
-              TextField(
-                controller: controller.totalAmountController,
+              //Discount field
+              const SizedBox(height: 10),
+              inputField(
+                controller: controller.discountController,
+                labelText: 'Discount',
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Total Amount',
-                  border: OutlineInputBorder(),
-                ),
               ),
+
               const SizedBox(height: 16),
 
               // Payment Method
@@ -192,19 +195,6 @@ class ShopSalesScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
 // Discount Field
-              PaymentMethodWidget(
-                title: 'Discount',
-                controller: controller.discountController,
-                isSelected: controller.isDiscount,
-                onSelect: () {
-                  controller.isDiscount.value = !controller.isDiscount.value;
-                  if (controller.isDiscount.value) {
-                    controller.clearImages();
-                  }
-                  controller.update();
-                },
-                labelText: 'Discount Amount',
-              ),
 
               const SizedBox(height: 30),
               // Submit Button

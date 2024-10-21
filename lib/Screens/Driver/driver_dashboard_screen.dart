@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:om/Services/api_service.dart';
 import 'package:om/Controllers/Driver/driver_dashboard_controller.dart';
 import 'package:om/Services/shared_preferences_service.dart';
 
@@ -17,6 +16,50 @@ class DriverDashboard extends StatelessWidget {
       backgroundColor: Get.theme.colorScheme.background,
       appBar: AppBar(
         backgroundColor: Get.theme.colorScheme.onBackground,
+        title: const Text(
+          "Dashboard",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              Get.dialog(Dialog(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text("Are you sure you want to logout?"),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              sharedPrefs.clearPreferences();
+                              Get.offAllNamed('/');
+                            },
+                            child: const Text("Yes"),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text("No"),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ));
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -72,24 +115,36 @@ class DriverDashboard extends StatelessWidget {
               leading: const Icon(Icons.logout),
               title: const Text('Logout'),
               onTap: () {
-                Get.snackbar(
-                    "Confirm Logout", "Are You Sure You Want To Logout?",
-                    snackPosition: SnackPosition.TOP,
-                    margin: const EdgeInsets.all(20),
-                    backgroundColor: Colors.white,
-                    colorText: Colors.black,
-                    duration: const Duration(seconds: 5),
-                    mainButton: TextButton(
-                      onPressed: () {
-                        APIService().logout();
-                        Get.offAllNamed('/login');
-                        Get.back();
-                      },
-                      child: const Text(
-                        'Yes',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ));
+                Get.dialog(Dialog(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text("Are you sure you want to logout?"),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                sharedPrefs.clearPreferences();
+                                Get.offAllNamed('/');
+                              },
+                              child: const Text("Yes"),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: const Text("No"),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
               },
             ),
           ],

@@ -47,6 +47,7 @@ class DriverDashboardController extends GetxController {
         Get.snackbar("No Data To Show", "Driver Not Assigned Yet");
       } else {
         Get.snackbar("Error", "Failed to fetch driver details");
+        Get.offAllNamed('/login');
       }
     } finally {
       isLoading(false);
