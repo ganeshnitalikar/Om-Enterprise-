@@ -20,6 +20,8 @@ class DriverDashboardController extends GetxController {
   void onInit() {
     if (sharedPrefs.getEmpId() != 0) {
       fetchDriverDetails(sharedPrefs.getEmpId());
+    } else {
+      Get.offAllNamed('/login');
     }
     super.onInit();
   }

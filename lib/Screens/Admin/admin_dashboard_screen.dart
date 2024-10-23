@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Admin/admin_dashboard_controller.dart';
@@ -6,6 +5,8 @@ import 'package:om/Screens/Admin/assign_vehicle_view.dart';
 import 'package:om/Screens/Admin/route_view.dart';
 import 'package:om/Screens/Admin/shop_screen.dart';
 import 'package:om/Screens/Admin/vehicle_view.dart';
+import 'package:om/Services/api_service.dart';
+import 'package:om/Utils/themes.dart';
 import 'package:om/Utils/utils.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
@@ -117,6 +118,14 @@ class AdminDashboardScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 16)),
                     onTap: () {
                       Get.to(() => AssignVehicleScreen());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.logout, color: Colors.tealAccent),
+                    title: const Text('Logout', style: TextStyle(fontSize: 16)),
+                    onTap: () {
+                      APIService().logout();
+                      Get.offAllNamed('/login');
                     },
                   ),
                 ],

@@ -26,11 +26,16 @@ class LoginController extends GetxController {
       final response = await apiService.login(username, password);
 
       if (response['statusCode'] == 200) {
+        print("login success");
         // Save token and role in shared preferences
         sharedPrefs.setToken(response['result']['token']);
         sharedPrefs.setEmployeeId(response['result']['employeeId']);
         sharedPrefs.setUsername(response['result']['userName']);
         sharedPrefs.setemployeeRole(response['result']['employeeRole']);
+
+        print(response['result']['employeeRole']);
+        print(response['result']['userName']);
+        print(response['result']['employeeId']);
 
         // Navigate based on employee role
         if (response['result']['employeeRole'] == 'Driver') {
@@ -57,11 +62,6 @@ class LoginController extends GetxController {
     } finally {
       isLoading(false);
     }
-  }
-
-  Future<void> logout() async {
-    await sharedPrefs.clearPreferences();
-    Get.toNamed('/login');
   }
 
   @override

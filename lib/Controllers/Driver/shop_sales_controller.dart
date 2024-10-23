@@ -243,7 +243,7 @@ class ShopSalesController extends GetxController {
     try {
       final response = await http.post(
         Uri.parse(
-            'http://139.59.7.147:7071/driverOperations/saveDriverExpenseAmount'),
+            'http://139.59.7.147:7071/driverOperations/saveShopSaleByDriver'),
         headers: {
           'accept': '*/*',
           'Content-Type': 'application/json',
