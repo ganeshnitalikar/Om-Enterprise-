@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:om/Controllers/Driver/driver_expense_controller.dart';
-import 'package:om/Utils/utils.dart';
 
 class PersonalExpenseScreen extends StatelessWidget {
   final DriverExpenseController controller = Get.put(DriverExpenseController());
@@ -14,27 +13,34 @@ class PersonalExpenseScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personal Expense'),
+        backgroundColor: Colors.blue[600],
+        centerTitle: true,
+        elevation: 4,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // DatePicker
             Obx(() {
               return Column(
                 children: [
+                  // Date Picker Field
                   TextField(
                     readOnly: true,
                     decoration: InputDecoration(
                       suffixIcon: const Icon(Icons.calendar_today),
-                      border: const OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       hintText: controller.date.value.isNotEmpty
                           ? controller.date.value
                           : 'Select Date',
                       labelText: controller.date.value.isNotEmpty
                           ? controller.date.value
                           : 'Select Date',
+                      filled: true,
+                      fillColor: Colors.blue[50],
                     ),
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
@@ -49,31 +55,36 @@ class PersonalExpenseScreen extends StatelessWidget {
                       }
                     },
                   ),
+                  const SizedBox(height: 20),
 
-                  const SizedBox(height: 16),
-
-                  // Amount Input
+                  // Amount Input Field
                   TextField(
                     decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText:
-                          controller.amount.value.isEmpty ? 'Amount' : 'Amount',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      labelText: 'Amount',
+                      hintText: 'Enter amount',
+                      filled: true,
+                      fillColor: Colors.blue[50],
                     ),
+                    keyboardType: TextInputType.number,
                     onChanged: (value) {
                       controller.amount.value = value;
                     },
                   ),
+                  const SizedBox(height: 20),
 
-                  const SizedBox(height: 16),
-
-                  // Details Input
-
+                  // Details Input Field
                   TextField(
                     decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: controller.amount.value.isEmpty
-                          ? 'Details'
-                          : 'Details',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      labelText: 'Details',
+                      hintText: 'Enter expense details',
+                      filled: true,
+                      fillColor: Colors.blue[50],
                     ),
                     onChanged: (value) {
                       controller.details.value = value;
@@ -83,11 +94,26 @@ class PersonalExpenseScreen extends StatelessWidget {
               );
             }),
 
-            submitButton(
-                text: "Add Expense",
+            // Submit Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
                 onPressed: () {
                   controller.submitExpense();
-                })
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  backgroundColor: Colors.blue[600],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  "Add Expense",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
           ],
         ),
       ),

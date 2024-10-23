@@ -20,6 +20,10 @@ class DriverDashboardController extends GetxController {
   void onInit() {
     if (sharedPrefs.getEmpId() != 0) {
       fetchDriverDetails(sharedPrefs.getEmpId());
+      print("Driver ID: ${sharedPrefs.getEmpId()}");
+      print("Assign Id : $assignId");
+      print(assignId.value);
+      print("Assign Id : ${sharedPrefs.getAssignId()}");
     }
     super.onInit();
   }

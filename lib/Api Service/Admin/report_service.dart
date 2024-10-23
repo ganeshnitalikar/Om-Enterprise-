@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-class ApiService {
+class ReportApiService {
   static final Dio dio = Dio();
 
   // Fetch shops
@@ -21,11 +21,13 @@ class ApiService {
   // Fetch employees
   static Future<List<dynamic>> fetchEmployees() async {
     try {
-      final response = await dio.get('http://139.59.7.147:7071/adminOperations/getAllEmployeeListForAttendance');
+      final response = await dio.get(
+          'http://139.59.7.147:7071/adminOperations/getAllEmployeeListForAttendance');
       if (response.statusCode == 200) {
         return response.data['result'];
       } else {
-        throw Exception('Failed to load employees: ${response.data['message']}');
+        throw Exception(
+            'Failed to load employees: ${response.data['message']}');
       }
     } catch (e) {
       print('Error fetching employees: $e');
@@ -38,9 +40,11 @@ class ApiService {
     try {
       final response = await dio.get('your-api-endpoint/balance-report');
       if (response.statusCode == 200) {
-        return response.data; // Assuming the balance report is structured correctly
+        return response
+            .data; // Assuming the balance report is structured correctly
       } else {
-        throw Exception('Failed to load balance report: ${response.data['message']}');
+        throw Exception(
+            'Failed to load balance report: ${response.data['message']}');
       }
     } catch (e) {
       print('Error fetching balance report: $e');

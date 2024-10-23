@@ -13,6 +13,7 @@ class ShopSalesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shop Sales'),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -36,15 +37,33 @@ class ShopSalesScreen extends StatelessWidget {
                             color: Colors.black,
                           ),
                           hintText: 'Start typing to search for a shop...',
-                          suffixIcon: Icon(Icons.search),
+                          suffixIcon:
+                              Icon(Icons.search, color: Colors.deepPurple),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                const BorderSide(color: Colors.deepPurple),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                const BorderSide(color: Colors.deepPurple),
+                          ),
                         ),
                       ),
+                      const SizedBox(height: 10),
                       if (controller.searchResults.isNotEmpty)
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade300,
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: ListView.builder(
                             shrinkWrap: true,
@@ -60,9 +79,8 @@ class ShopSalesScreen extends StatelessWidget {
                                   controller.shopNameController.text =
                                       shopLabel;
                                   controller.selectedShopId = shopId;
-                                  controller.searchResults
-                                      .clear(); // Clear the dropdown
-                                  controller.update(); // Trigger UI update
+                                  controller.searchResults.clear();
+                                  controller.update();
                                 },
                               );
                             },
@@ -85,7 +103,10 @@ class ShopSalesScreen extends StatelessWidget {
 
               // Payment Method
               const Text('Payment Method',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple)),
               const SizedBox(height: 20),
 
               // Cash Payment Method
@@ -97,27 +118,27 @@ class ShopSalesScreen extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           controller.isCash.value = !controller.isCash.value;
-                          // Disable other payment methods if cash is selected
                           if (controller.isCash.value) {
                             controller.clearImages();
                           }
                           controller.update();
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.grey,
+                              color: Colors.grey.shade300,
                             ),
                             color: controller.isCash.value
-                                ? Colors.green
-                                : Colors.blue,
-                            borderRadius: BorderRadius.circular(5),
+                                ? Colors.green.shade400
+                                : Colors.deepPurple.shade100,
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Text('Cash',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               )),
                         ),
                       ),
@@ -131,7 +152,12 @@ class ShopSalesScreen extends StatelessWidget {
                             decoration: const InputDecoration(
                               labelText: 'Cash Amount',
                               border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
+                                borderSide:
+                                    BorderSide(color: Colors.deepPurple),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.deepPurple),
                               ),
                             ),
                           ),
@@ -142,8 +168,8 @@ class ShopSalesScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 20),
-              // Cheque Payment Method
 
+              // Cheque Payment Method
               PaymentMethodWidget(
                 title: 'Cheque',
                 controller: controller.chequeAmountController,
@@ -160,7 +186,7 @@ class ShopSalesScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-// Online Payment Method
+              // Online Payment Method
               PaymentMethodWidget(
                 title: 'Online',
                 controller: controller.onlineAmountController,
@@ -177,7 +203,7 @@ class ShopSalesScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-// Balance Payment Method
+              // Balance Payment Method
               PaymentMethodWidget(
                 title: 'Balance',
                 controller: controller.balanceController,
@@ -192,11 +218,8 @@ class ShopSalesScreen extends StatelessWidget {
                 labelText: 'Balance Amount',
               ),
 
-              const SizedBox(height: 20),
-
-// Discount Field
-
               const SizedBox(height: 30),
+
               // Submit Button
               submitButton(
                 text: "Add Expense",
@@ -216,7 +239,7 @@ class ShopSalesScreen extends StatelessWidget {
       onPressed: () {
         onPressed();
       },
-      icon: const Icon(Icons.camera_alt),
+      icon: const Icon(Icons.camera_alt, color: Colors.deepPurple),
     );
   }
 }
@@ -250,17 +273,20 @@ class PaymentMethodWidget extends StatelessWidget {
               onSelect();
             },
             child: Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                color: isSelected.value ? Colors.green : Colors.blue,
-                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.grey.shade300),
+                color: isSelected.value
+                    ? Colors.green.shade400
+                    : Colors.deepPurple.shade100,
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
                 title,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -280,7 +306,10 @@ class PaymentMethodWidget extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: labelText,
                             border: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue),
+                              borderSide: BorderSide(color: Colors.deepPurple),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.deepPurple),
                             ),
                           ),
                         ),
@@ -290,11 +319,13 @@ class PaymentMethodWidget extends StatelessWidget {
                           screencontroller.pickMedia();
                         },
                         child: Container(
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: Colors.grey.shade300,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(Icons.camera_alt, size: 40),
+                          child: const Icon(Icons.camera_alt,
+                              size: 30, color: Colors.deepPurple),
                         ),
                       ),
                     ],

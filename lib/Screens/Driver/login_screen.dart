@@ -29,7 +29,10 @@ class LoginScreen extends StatelessWidget {
           Center(
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom), // Adjust for keyboard
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context)
+                        .viewInsets
+                        .bottom), // Adjust for keyboard
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -48,7 +51,8 @@ class LoginScreen extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.85,
                       padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.15), // semi-transparent white
+                        color: Colors.white
+                            .withOpacity(0.15), // semi-transparent white
                         borderRadius: BorderRadius.circular(25),
                         boxShadow: [
                           BoxShadow(
@@ -81,9 +85,11 @@ class LoginScreen extends StatelessWidget {
                             controller: controller.usernameController,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.person, color: Colors.white),
+                              prefixIcon:
+                                  const Icon(Icons.person, color: Colors.white),
                               labelText: 'Username',
-                              labelStyle: const TextStyle(color: Colors.white70),
+                              labelStyle:
+                                  const TextStyle(color: Colors.white70),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.2),
                               border: OutlineInputBorder(
@@ -99,9 +105,11 @@ class LoginScreen extends StatelessWidget {
                             obscureText: true,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                              prefixIcon:
+                                  const Icon(Icons.lock, color: Colors.white),
                               labelText: 'Password',
-                              labelStyle: const TextStyle(color: Colors.white70),
+                              labelStyle:
+                                  const TextStyle(color: Colors.white70),
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.2),
                               border: OutlineInputBorder(
@@ -113,11 +121,17 @@ class LoginScreen extends StatelessWidget {
                           const SizedBox(height: 30),
                           // Login button with animation and elevation
                           Obx(() => controller.isLoading.value
-                              ? const CircularProgressIndicator(color: Colors.white)
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white)
                               : ElevatedButton(
-                                  onPressed: controller.login,
+                                  onPressed: () {
+                                    controller.login();
+                                  },
                                   style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white, backgroundColor: Colors.white.withOpacity(0.3), padding: const EdgeInsets.symmetric(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0.3),
+                                    padding: const EdgeInsets.symmetric(
                                         vertical: 15, horizontal: 80),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(30),

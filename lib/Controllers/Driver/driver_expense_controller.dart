@@ -13,12 +13,14 @@ class DriverExpenseController extends GetxController {
     int createdBy = sharedPrefs.getEmpId();
     print('assignVehicleId: $assignVehicleId');
     print('createdBy: $createdBy');
+
     var requestBody = {
       "assignVehicleId": {"id": assignVehicleId},
       "expenseAmount": amount.value,
       "reason": details.value,
       "createdBy": createdBy
     };
+    print(requestBody);
     try {
       var response = await http.post(
         Uri.parse(
