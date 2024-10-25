@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:om/Api%20Service/Admin/admin_service.dart';
+import 'package:om/Api%20Service/Admin/Api.dart';
 
 class AdminDashboardController extends GetxController {
-  final AdminService _adminService = AdminService();
+   final api=new ApiClass();
   RxString userRole = ''.obs;
 
   @override
@@ -12,7 +12,7 @@ class AdminDashboardController extends GetxController {
   }
 
   void getUserRole() async {
-    String role = await _adminService.getUserRole();
+    String role = await api.getUserRole();
     userRole.value = role;
   }
 

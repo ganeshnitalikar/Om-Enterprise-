@@ -1,30 +1,60 @@
 import 'package:flutter/material.dart';
-import '../../Api Service/Admin/shop_service.dart';
+import 'package:get/get.dart';
+import 'package:om/Api%20Service/Admin/Api.dart';
 import '../../Model/Admin/shop.dart';
 
-class ShopController with ChangeNotifier {
-  final ShopService _shopService = ShopService();
-  List<dynamic> routes = [];
+class ShopController extends GetxController {
+  final TextEditingController shopNameController = TextEditingController();
+  final TextEditingController shopContactController = TextEditingController();
   String? selectedRouteId;
   bool isActive = false;
+  List<dynamic> routes = [];
+   final api=new ApiClass();
 
-  Future<void> fetchRoutes(String apiEndpoint) async {
-    routes = await _shopService.fetchRoutes(apiEndpoint);
-    notifyListeners();
+  @override
+  void onInit() {
+    super.onInit();
+    fetchRoutes();
   }
 
-  Future<void> saveShop(String apiEndpoint, String shopName, String shopContact) async {
-    if (selectedRouteId != null) {
+  Future<void> fetchRoutes() async {
+    try {
+      routes = await api.fetchRoutes();
+      update(); // Notify listeners about the change
+    } catch (e) {
+      Get.snackbar('Error', 'Error fetching routes: $e',
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  Future<void> saveShop() async {
+    final String shopName = shopNameController.text;
+    final String shopContact = shopContactController.text;
+
+    if (shopName.isNotEmpty &&
+        shopContact.isNotEmpty &&
+        selectedRouteId != null) {
       final shop = Shop(
         shopName: shopName,
         shopContact: shopContact,
         routeId: int.parse(selectedRouteId!),
         isActive: isActive,
-        createdBy: 2, // Assuming static values; adjust as needed
+        createdBy: 2,
         updatedBy: 2,
       );
 
-      await _shopService.saveShop(shop, apiEndpoint);
+      try {
+        await api.saveShop(
+            shop, 'http://139.59.7.147:7071/masters/saveShop');
+        Get.snackbar('Success', 'Shop saved successfully!',
+            snackPosition: SnackPosition.BOTTOM);
+      } catch (e) {
+        Get.snackbar('Error', 'Error saving shop: $e',
+            snackPosition: SnackPosition.BOTTOM);
+      }
+    } else {
+      Get.snackbar('Warning', 'Please fill all fields.',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

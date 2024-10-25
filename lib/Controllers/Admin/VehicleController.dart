@@ -1,10 +1,9 @@
 // vehicle_controller.dart
 import 'package:get/get.dart';
-
-import '../../Api Service/Admin/VehicleService.dart';
+import 'package:om/Api%20Service/Admin/Api.dart';
 import '../../Model/Admin/VehicleModel.dart';
 class VehicleController extends GetxController {
-  final VehicleService _vehicleService = VehicleService();
+   final api=new ApiClass();
   var vehicleNo = ''.obs;
   var isActive = false.obs;
   var createdBy = 2;
@@ -34,7 +33,7 @@ class VehicleController extends GetxController {
     );
 
     try {
-      await _vehicleService.saveVehicle(vehicle);
+      await api.saveVehicle(vehicle);
       Get.snackbar('Success', 'Vehicle saved successfully');
     } catch (e) {
       Get.snackbar('Error', 'Failed to save vehicle: ${e.toString()}');

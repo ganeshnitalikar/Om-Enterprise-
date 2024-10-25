@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:om/Api%20Service/Admin/employee_service.dart';
-
+import 'package:om/Api%20Service/Admin/Api.dart';
 
 class EmployeeCard extends StatelessWidget {
+   final api=new ApiClass();
   final Map employee;
   final Function refreshEmployees;
 
-  const EmployeeCard({
+  EmployeeCard({
     required this.employee,
     required this.refreshEmployees,
     Key? key,
@@ -48,7 +48,7 @@ class EmployeeCard extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () async {
-                            bool success = await EmployeeService().deleteEmployee(employee['Id']);
+                            bool success = await api.deleteEmployee(employee['Id']);
                             if (success) {
                               refreshEmployees(); // Refresh the list of employees
                               ScaffoldMessenger.of(context).showSnackBar(

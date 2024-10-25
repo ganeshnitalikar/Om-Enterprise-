@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:om/Controllers/Admin/add_employee_controller.dart';
 import 'package:om/Utils/themes.dart';
 
@@ -38,6 +37,7 @@ class AddEmployeeScreen extends StatelessWidget {
             ),
 
             // Dropdown to select Role
+            // Dropdown to select Role
             Obx(() => DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText: 'Select Role',
@@ -45,6 +45,8 @@ class AddEmployeeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
+                  dropdownColor:
+                      Colors.white, // Set dropdown background color to white
                   value: controller.selectedRole.value.isNotEmpty
                       ? controller.selectedRole.value
                       : null,
@@ -54,10 +56,15 @@ class AddEmployeeScreen extends StatelessWidget {
                   items: controller.roles.map((role) {
                     return DropdownMenuItem<String>(
                       value: role['id'].toString(),
-                      child: Text(role['label']),
+                      child: Text(
+                        role['label'],
+                        style: TextStyle(
+                            color: Colors.black), // Set text color to black
+                      ),
                     );
                   }).toList(),
                 )),
+
             SizedBox(height: 20),
 
             // First Name and Last Name Fields

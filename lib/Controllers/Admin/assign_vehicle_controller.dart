@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import '../../Api Service/Admin/assign_vehicle_service.dart';
+import 'package:om/Api%20Service/Admin/Api.dart';
 
 class AssignVehicleController extends GetxController {
-  final AssignVehicleService service = AssignVehicleService(); // Create an instance of the service
+   final api=new ApiClass(); // Create an instance of the service
 
   var isLoadingEmployees = true.obs;
   var isLoadingVehicles = true.obs;
@@ -28,7 +28,7 @@ class AssignVehicleController extends GetxController {
   void fetchEmployees() async {
     isLoadingEmployees(true);
     try {
-      final response = await service.fetchEmployees();
+      final response = await api.fetchEmployees();
       if (response.isNotEmpty) {
         employees.value = response; // Directly assigning raw data
       }
@@ -42,7 +42,7 @@ class AssignVehicleController extends GetxController {
   void fetchVehicles() async {
     isLoadingVehicles(true);
     try {
-      final response = await service.fetchVehicles();
+      final response = await api.fetchVehicles();
       if (response.isNotEmpty) {
         vehicles.value = response; // Directly assigning raw data
       }
@@ -56,7 +56,7 @@ class AssignVehicleController extends GetxController {
   void fetchRoutes() async {
     isLoadingRoutes(true);
     try {
-      final response = await service.fetchRoutes();
+      final response = await api.fetchRoutes();
       if (response.isNotEmpty) {
         routes.value = response; // Directly assigning raw data
       }
@@ -90,7 +90,7 @@ Future<void> assignVehicle() async {
 
   try {
     // Call the assign vehicle service method with the constructed payload
-    final result = await AssignVehicleService().assignVehicle(data);
+    final result = await api.assignVehicle(data);
     print('API Response: $result'); // Log the response for debugging
 
     // Check for errors in the API response

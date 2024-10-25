@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:om/Api%20Service/Admin/route_service.dart';
+import 'package:om/Api%20Service/Admin/Api.dart';
 import 'package:om/Model/Admin/route_model.dart';
 class RouteController extends GetxController {
-  final RouteService _routeService = RouteService();
+   final api=new ApiClass();
   var routeName = ''.obs;
   var isActive = false.obs;
 
@@ -25,7 +25,7 @@ class RouteController extends GetxController {
       );
 
       try {
-        await _routeService.saveRoute(newRoute);
+        await api.saveRoute(newRoute);
         Get.snackbar('Success', 'Route saved successfully');
       } catch (e) {
         Get.snackbar('Error', 'Failed to save route: $e');

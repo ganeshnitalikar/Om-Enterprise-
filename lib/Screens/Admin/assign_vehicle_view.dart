@@ -44,7 +44,7 @@ class AssignVehicleScreen extends StatelessWidget {
                 items: controller.employees.map((employee) {
                   return DropdownMenuItem<int>(
                     value: employee['id'],
-                    child: Text(employee['label']),
+                    child: Text(employee['label'],style: TextStyle(color: Colors.black)),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -73,7 +73,7 @@ class AssignVehicleScreen extends StatelessWidget {
                 items: controller.vehicles.map((vehicle) {
                   return DropdownMenuItem<int>(
                     value: vehicle['id'],
-                    child: Text(vehicle['label']),
+                    child: Text(vehicle['label'],style: TextStyle(color: Colors.black),),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -101,7 +101,7 @@ class AssignVehicleScreen extends StatelessWidget {
                 items: controller.routes.map((route) {
                   return DropdownMenuItem<int>(
                     value: route['id'],
-                    child: Text(route['label']),
+                    child: Text(route['label'],style: TextStyle(color: Colors.black)),
                   );
                 }).toList(),
                 onChanged: (value) {
