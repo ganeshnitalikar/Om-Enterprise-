@@ -62,72 +62,72 @@ class ShopSalesController extends GetxController {
     }
   }
 
-  void clearImages() {
-    if (isCash.value) {
-      isCheque.value = false;
-      isOnline.value = false;
-      isBalance.value = false;
+  // void clearImages() {
+  //   if (isCash.value) {
+  //     isCheque.value = false;
+  //     isOnline.value = false;
+  //     isBalance.value = false;
 
-      isDiscount.value = false;
-      onlineAmountController.clear();
-      discountController.clear();
-      balanceController.clear();
-      chequeAmountController.clear();
-      chequeImage.value = null;
-      balanceImage.value = null;
-      onlineReceipt.value = null;
-    } else if (isCheque.value) {
-      isCash.value = false;
-      isOnline.value = false;
-      isBalance.value = false;
+  //     isDiscount.value = false;
+  //     onlineAmountController.clear();
+  //     discountController.clear();
+  //     balanceController.clear();
+  //     chequeAmountController.clear();
+  //     chequeImage.value = null;
+  //     balanceImage.value = null;
+  //     onlineReceipt.value = null;
+  //   } else if (isCheque.value) {
+  //     isCash.value = false;
+  //     isOnline.value = false;
+  //     isBalance.value = false;
 
-      isDiscount.value = false;
+  //     isDiscount.value = false;
 
-      cashAmountController.clear();
-      onlineAmountController.clear();
-      discountController.clear();
-      balanceController.clear();
-      balanceImage.value = null;
-      onlineReceipt.value = null;
-    } else if (isOnline.value) {
-      isCash.value = false;
-      isCheque.value = false;
-      isBalance.value = false;
+  //     cashAmountController.clear();
+  //     onlineAmountController.clear();
+  //     discountController.clear();
+  //     balanceController.clear();
+  //     balanceImage.value = null;
+  //     onlineReceipt.value = null;
+  //   } else if (isOnline.value) {
+  //     isCash.value = false;
+  //     isCheque.value = false;
+  //     isBalance.value = false;
 
-      isDiscount.value = false;
+  //     isDiscount.value = false;
 
-      cashAmountController.clear();
-      chequeAmountController.clear();
-      discountController.clear();
-      balanceController.clear();
-      chequeImage.value = null;
-      balanceImage.value = null;
-    } else if (isBalance.value) {
-      isCash.value = false;
-      isCheque.value = false;
-      isOnline.value = false;
-      isDiscount.value = false;
+  //     cashAmountController.clear();
+  //     chequeAmountController.clear();
+  //     discountController.clear();
+  //     balanceController.clear();
+  //     chequeImage.value = null;
+  //     balanceImage.value = null;
+  //   } else if (isBalance.value) {
+  //     isCash.value = false;
+  //     isCheque.value = false;
+  //     isOnline.value = false;
+  //     isDiscount.value = false;
 
-      onlineAmountController.clear();
-      discountController.clear();
-      cashAmountController.clear();
-      chequeImage.value = null;
-      onlineReceipt.value = null;
-    } else if (isDiscount.value) {
-      isCash.value = false;
-      isCheque.value = false;
-      isOnline.value = false;
-      isBalance.value = false;
+  //     onlineAmountController.clear();
+  //     discountController.clear();
+  //     cashAmountController.clear();
+  //     chequeImage.value = null;
+  //     onlineReceipt.value = null;
+  //   } else if (isDiscount.value) {
+  //     isCash.value = false;
+  //     isCheque.value = false;
+  //     isOnline.value = false;
+  //     isBalance.value = false;
 
-      cashAmountController.clear();
-      chequeAmountController.clear();
-      onlineAmountController.clear();
-      balanceController.clear();
-      chequeImage.value = null;
-      balanceImage.value = null;
-      onlineReceipt.value = null;
-    }
-  }
+  //     cashAmountController.clear();
+  //     chequeAmountController.clear();
+  //     onlineAmountController.clear();
+  //     balanceController.clear();
+  //     chequeImage.value = null;
+  //     balanceImage.value = null;
+  //     onlineReceipt.value = null;
+  //   }
+  // }
 
   Future<void> pickMedia() async {
     final pickedFile =
@@ -162,15 +162,15 @@ class ShopSalesController extends GetxController {
     }
 
     // Ensure only one payment method is selected
-    int paymentMethodsSelected = 0;
-    if (isCash.value) paymentMethodsSelected++;
-    if (isCheque.value) paymentMethodsSelected++;
-    if (isOnline.value) paymentMethodsSelected++;
-    if (isBalance.value) paymentMethodsSelected++;
-    if (paymentMethodsSelected != 1) {
-      Get.snackbar('Error', 'Please select exactly one payment method');
-      return;
-    }
+    // int paymentMethodsSelected = 0;
+    // if (isCash.value) paymentMethodsSelected++;
+    // if (isCheque.value) paymentMethodsSelected++;
+    // if (isOnline.value) paymentMethodsSelected++;
+    // if (isBalance.value) paymentMethodsSelected++;
+    // if (paymentMethodsSelected != 1) {
+    //   Get.snackbar('Error', 'Please select exactly one payment method');
+    //   return;
+    // }
 
     // Validate specific fields based on the selected payment method
     if (isCash.value) {
@@ -178,30 +178,30 @@ class ShopSalesController extends GetxController {
         Get.snackbar('Error', 'Please enter cash amount');
         return;
       }
-    } else if (isCheque.value) {
+    }
+    if (isCheque.value) {
       if (chequeAmountController.text.isEmpty) {
         Get.snackbar('Error', 'Please enter cheque amount');
         return;
-      }
-      if (chequeImage.value == null) {
+      } else if (chequeImage.value == null) {
         Get.snackbar('Error', 'Please upload cheque image');
         return;
       }
-    } else if (isOnline.value) {
+    }
+    if (isOnline.value) {
       if (onlineAmountController.text.isEmpty) {
         Get.snackbar('Error', 'Please enter online payment amount');
         return;
-      }
-      if (onlineReceipt.value == null) {
+      } else if (onlineReceipt.value == null) {
         Get.snackbar('Error', 'Please upload online payment receipt');
         return;
       }
-    } else if (isBalance.value) {
+    }
+    if (isBalance.value) {
       if (balanceController.text.isEmpty) {
         Get.snackbar('Error', 'Please enter balance amount');
         return;
-      }
-      if (balanceImage.value == null) {
+      } else if (balanceImage.value == null) {
         Get.snackbar('Error', 'Please upload balance image');
         return;
       }

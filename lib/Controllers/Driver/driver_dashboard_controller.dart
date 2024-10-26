@@ -17,15 +17,22 @@ class DriverDashboardController extends GetxController {
   final APIService apiService = APIService();
 
   @override
-  void onInit() {
-    if (sharedPrefs.getEmpId() != 0) {
-      fetchDriverDetails(sharedPrefs.getEmpId());
-      print("Driver ID: ${sharedPrefs.getEmpId()}");
-      print("Assign Id : $assignId");
-      print(assignId.value);
-      print("Assign Id : ${sharedPrefs.getAssignId()}");
-    }
-    super.onInit();
+  void onReady() {
+    super.onReady();
+    fetchDriverDetails(sharedPrefs.getEmpId());
+  }
+
+  void clearValues() {
+    totalMaterial.value = 0.0;
+    totalSale.value = 0.0;
+    totalExpense.value = 0.0;
+    currentInVehicle.value = 0.0;
+    totalDiscount.value = 0.0;
+    totalMaterialReturnByShop.value = 0;
+    name.value = '';
+    routeName.value = '';
+    assignId.value = 0;
+    routeId.value = 0;
   }
 
   void fetchDriverDetails(int driverId) async {
@@ -43,10 +50,23 @@ class DriverDashboardController extends GetxController {
       routeId.value = result['Route Id'];
       assignId.value = result['Assign Id'];
 
-      sharedPrefs.setRouteId(routeId.value);
-      sharedPrefs.setEmployeeName(name.value);
-      sharedPrefs.setAssignId(assignId.value);
+      await sharedPrefs.setRouteId(routeId.value);
+      await sharedPrefs.setEmployeeName(name.value);
+      await sharedPrefs.setAssignId(assignId.value);
+      update();
+      print("Route ID: ${routeId.value}");
+      print("Employee Name: ${name.value}");
+      print("Route Name: ${routeName.value}");
+      print("Assign ID: ${assignId.value}");
+      print("Total Material: ${totalMaterial.value}");
+      print("Total Sale: ${totalSale.value}");
+      print("Total Expense: ${totalExpense.value}");
+      print("Current In Vehicle: ${currentInVehicle.value}");
+      print("Total Discount: ${totalDiscount.value}");
+      print(
+          "Total Material Return By Shop: ${totalMaterialReturnByShop.value}");
     } catch (e) {
+      print("error , $e");
       if (routeId.value == 0) {
         Get.snackbar("No Data To Show", "Driver Not Assigned Yet");
       } else {
@@ -66,5 +86,10 @@ class DriverDashboardController extends GetxController {
     } catch (e) {
       return 0.0;
     }
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 }

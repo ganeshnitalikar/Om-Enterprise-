@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:om/Utils/utils.dart';
-
+import 'package:om/Screens/Driver/cash_settlement_screen.dart';
+import 'package:om/Screens/Driver/shop_on_route_screen.dart';
+import 'package:om/Utils/theme.dart';
 import 'package:om/Screens/Admin/admin_dashboard_screen.dart';
 import 'package:om/Screens/Driver/driver_dashboard_screen.dart';
 import 'package:om/Screens/Driver/driver_report_screen.dart';
@@ -13,7 +14,7 @@ import 'package:om/Services/shared_preferences_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await sharedPrefs.init(); //
+  await sharedPrefs.init();
   runApp(
     const MyApp(),
   );
@@ -38,7 +39,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Om Enterprises',
       theme: Themes.light,
-      darkTheme: Themes.dark,
       themeMode: ThemeMode.system,
       home: FutureBuilder<String?>(
         future: getLoginStatus(),
@@ -54,7 +54,6 @@ class MyApp extends StatelessWidget {
               return LoginScreen();
             }
           } else {
-            // Not logged in, show login screen
             return LoginScreen();
           }
         },
@@ -62,11 +61,14 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: () => LoginScreen()),
         GetPage(name: '/driverDashboard', page: () => DriverDashboard()),
-        GetPage(name: '/adminDashboard', page: () => AdminDashboardScreen()),
         GetPage(name: '/driverExpense', page: () => PersonalExpenseScreen()),
         GetPage(name: '/driverShopSales', page: () => ShopSalesScreen()),
-        GetPage(name: '/expiryMaterial', page: () => ExpiryMaterialScreen()),
         GetPage(name: '/driverReport', page: () => const DriverReportScreen()),
+        GetPage(name: '/driverShopOnRoute', page: () => ShopScreen()),
+        GetPage(
+            name: '/driverCashSettlement', page: () => CashSettlementScreen()),
+        GetPage(
+            name: '/driverExpiryMaterial', page: () => ExpiryMaterialScreen()),
         GetPage(name: '/adminDashboard', page: () => AdminDashboardScreen()),
       ],
     );

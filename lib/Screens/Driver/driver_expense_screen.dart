@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:om/Controllers/Driver/driver_expense_controller.dart';
+import 'package:om/Utils/utils.dart';
 
 class PersonalExpenseScreen extends StatelessWidget {
   final DriverExpenseController controller = Get.put(DriverExpenseController());
@@ -10,13 +11,9 @@ class PersonalExpenseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Get.theme;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Personal Expense'),
-        backgroundColor: Colors.blue[600],
-        centerTitle: true,
-        elevation: 4,
-      ),
+      appBar: buildAppBar(theme: theme, title: "Personal Expense"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(
@@ -29,13 +26,13 @@ class PersonalExpenseScreen extends StatelessWidget {
                   TextField(
                     readOnly: true,
                     decoration: InputDecoration(
-                      suffixIcon: const Icon(Icons.calendar_today),
+                      suffixIcon: const Icon(Icons.calendar_month),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
+                        borderSide:
+                            theme.inputDecorationTheme.border!.borderSide,
                       ),
-                      hintText: controller.date.value.isNotEmpty
-                          ? controller.date.value
-                          : 'Select Date',
+                      hintText: 'Select Date',
                       labelText: controller.date.value.isNotEmpty
                           ? controller.date.value
                           : 'Select Date',
@@ -58,37 +55,23 @@ class PersonalExpenseScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   // Amount Input Field
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      labelText: 'Amount',
-                      hintText: 'Enter amount',
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                    ),
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      controller.amount.value = value;
-                    },
-                  ),
+                  OmTextField(
+                      labelText: "Amount",
+                      hintText: "Enter the Amount",
+                      onChanged: (value) {
+                        controller.amount.value = value;
+                      },
+                      keyboardType: TextInputType.number),
                   const SizedBox(height: 20),
 
                   // Details Input Field
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      labelText: 'Details',
-                      hintText: 'Enter expense details',
-                      filled: true,
-                      fillColor: Colors.blue[50],
-                    ),
+                  OmTextField(
+                    labelText: "Details",
+                    hintText: "Enter the Details",
                     onChanged: (value) {
                       controller.details.value = value;
                     },
+                    keyboardType: TextInputType.text,
                   ),
                 ],
               );
@@ -103,15 +86,14 @@ class PersonalExpenseScreen extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  backgroundColor: Colors.blue[600],
+                  backgroundColor: theme.colorScheme.secondary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  "Add Expense",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+                child: Text("Add Expense",
+                    style: theme.textTheme.bodyLarge!
+                        .copyWith(color: Colors.white, fontSize: 20)),
               ),
             ),
           ],

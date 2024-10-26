@@ -15,8 +15,14 @@ class LoginController extends GetxController {
     String username = usernameController.text.trim();
     String password = passwordController.text.trim();
 
-    if (username.isEmpty || password.isEmpty) {
-      Get.snackbar('Error', 'Please enter both username and password');
+    if (username.isEmpty) {
+      Get.snackbar('Error', 'Please enter username');
+      return;
+    } else if (password.isEmpty) {
+      Get.snackbar('Error', 'Please enter password');
+      return;
+    } else if (username.isEmpty && password.isEmpty) {
+      Get.snackbar('Error', 'Please enter username and password');
       return;
     }
 
@@ -26,23 +32,21 @@ class LoginController extends GetxController {
       final response = await apiService.login(username, password);
 
       if (response['statusCode'] == 200) {
-        // Save token and role in shared preferences
-        sharedPrefs.setToken(response['result']['token']);
-        sharedPrefs.setEmployeeId(response['result']['employeeId']);
-        sharedPrefs.setUsername(response['result']['userName']);
-        sharedPrefs.setemployeeRole(response['result']['employeeRole']);
+        await sharedPrefs.setToken(response['result']['token']);
+        await sharedPrefs.setEmployeeId(response['result']['employeeId']);
+        await sharedPrefs.setUsername(response['result']['userName']);
+        await sharedPrefs.setemployeeRole(response['result']['employeeRole']);
+        print(response['result']['employeeRole']);
+        print(sharedPrefs.getEmployeeRole());
+        print(sharedPrefs.getToken());
+        print(sharedPrefs.getEmpId());
+        print(sharedPrefs.getEmployeeName());
 
         // Navigate based on employee role
         if (response['result']['employeeRole'] == 'Driver') {
-          Get.offNamed('/driverDashboard', arguments: {
-            'username': response['result']['userName'],
-            'employeeId': response['result']['employeeId']
-          });
+          Get.offNamed('/driverDashboard');
         } else if (response['result']['employeeRole'] == 'Admin') {
-          Get.offNamed('/adminDashboard', arguments: {
-            'username': response['result']['userName'],
-            'employeeId': response['result']['employeeId']
-          });
+          Get.offNamed('/adminDashboard');
         } else {
           Get.snackbar('Error', 'Invalid Employee Type');
         }
@@ -57,11 +61,6 @@ class LoginController extends GetxController {
     } finally {
       isLoading(false);
     }
-  }
-
-  Future<void> logout() async {
-    await sharedPrefs.clearPreferences();
-    Get.toNamed('/login');
   }
 
   @override

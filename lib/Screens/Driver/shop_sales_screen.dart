@@ -13,7 +13,6 @@ class ShopSalesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shop Sales'),
-        backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -34,36 +33,25 @@ class ShopSalesScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           labelText: 'Shop Name',
                           labelStyle: Get.theme.textTheme.labelLarge!.copyWith(
-                            color: Colors.black,
+                            color: Get.theme.primaryColor,
                           ),
                           hintText: 'Start typing to search for a shop...',
+                          hintStyle: TextStyle(color: Colors.grey[600]),
                           suffixIcon:
-                              Icon(Icons.search, color: Colors.deepPurple),
+                              Icon(Icons.search, color: Get.theme.primaryColor),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide:
-                                const BorderSide(color: Colors.deepPurple),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                const BorderSide(color: Colors.deepPurple),
+                                BorderSide(color: Get.theme.primaryColor),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
                       if (controller.searchResults.isNotEmpty)
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                              ),
-                            ],
-                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           child: ListView.builder(
                             shrinkWrap: true,
@@ -79,8 +67,9 @@ class ShopSalesScreen extends StatelessWidget {
                                   controller.shopNameController.text =
                                       shopLabel;
                                   controller.selectedShopId = shopId;
-                                  controller.searchResults.clear();
-                                  controller.update();
+                                  controller.searchResults
+                                      .clear(); // Clear the dropdown
+                                  controller.update(); // Trigger UI update
                                 },
                               );
                             },
@@ -91,8 +80,7 @@ class ShopSalesScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              //Discount field
-              const SizedBox(height: 10),
+              // Discount Field
               inputField(
                 controller: controller.discountController,
                 labelText: 'Discount',
@@ -101,131 +89,154 @@ class ShopSalesScreen extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Payment Method
-              const Text('Payment Method',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.deepPurple)),
+              // Payment Method Title
+              const Text(
+                'Payment Method',
+                // style: Get.theme.textTheme.headline6!
+                //     .copyWith(fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 20),
 
               // Cash Payment Method
-              Obx(
-                () {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          controller.isCash.value = !controller.isCash.value;
-                          if (controller.isCash.value) {
-                            controller.clearImages();
-                          }
-                          controller.update();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                            ),
-                            color: controller.isCash.value
-                                ? Colors.green.shade400
-                                : Colors.deepPurple.shade100,
-                            borderRadius: BorderRadius.circular(10),
+              Obx(() {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        controller.isCash.value = !controller.isCash.value;
+                        if (controller.isCash.value) {
+                          // controller.clearImages();
+                        }
+                        controller.update();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: controller.isCash.value
+                              ? Colors.green
+                              : Get.theme.primaryColor,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text(
+                          'Cash',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          child: const Text('Cash',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              )),
                         ),
                       ),
-                      if (controller.isCash.value) ...[
-                        SizedBox(
+                    ),
+                    const SizedBox(width: 10),
+                    if (controller.isCash.value)
+                      Flexible(
+                        child: SizedBox(
                           height: 50,
                           width: MediaQuery.of(context).size.width * .5,
                           child: TextField(
                             controller: controller.cashAmountController,
                             keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText: 'Cash Amount',
-                              border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.deepPurple),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.deepPurple),
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue),
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ],
-                  );
-                },
-              ),
+                      )
+                    else
+                      const SizedBox(),
+                  ],
+                );
+              }),
+
               const SizedBox(height: 20),
 
               // Cheque Payment Method
-              PaymentMethodWidget(
-                title: 'Cheque',
-                controller: controller.chequeAmountController,
-                isSelected: controller.isCheque,
-                onSelect: () {
-                  controller.isCheque.value = !controller.isCheque.value;
-                  if (controller.isCheque.value) {
-                    controller.clearImages();
-                  }
-                  controller.update();
-                },
-                labelText: 'Cheque Amount',
-              ),
+              Obx(() {
+                return PaymentMethod(
+                  title: 'Cheque',
+                  isSelected: controller.isCheque,
+                  onSelect: () {
+                    controller.isCheque.value = !controller.isCheque.value;
+                    if (controller.isCheque.value) {
+                      // controller.clearImages();
+                    }
+                    controller.update();
+                  },
+                  amountController: controller.chequeAmountController,
+                  labelText: 'Cheque Amount',
+                  context: context,
+                  isAmountVisible: controller.isCheque.value,
+                );
+              }),
 
               const SizedBox(height: 20),
 
               // Online Payment Method
-              PaymentMethodWidget(
-                title: 'Online',
-                controller: controller.onlineAmountController,
-                isSelected: controller.isOnline,
-                onSelect: () {
-                  controller.isOnline.value = !controller.isOnline.value;
-                  if (controller.isOnline.value) {
-                    controller.clearImages();
-                  }
-                  controller.update();
-                },
-                labelText: 'Online Amount',
-              ),
+              Obx(() {
+                return PaymentMethod(
+                  title: 'Online',
+                  isSelected: controller.isOnline,
+                  onSelect: () {
+                    controller.isOnline.value = !controller.isOnline.value;
+                    if (controller.isOnline.value) {
+                      // controller.clearImages();
+                    }
+                    controller.update();
+                  },
+                  amountController: controller.onlineAmountController,
+                  labelText: 'Online Amount',
+                  context: context,
+                  isAmountVisible: controller.isOnline.value,
+                );
+              }),
 
               const SizedBox(height: 20),
 
               // Balance Payment Method
-              PaymentMethodWidget(
-                title: 'Balance',
-                controller: controller.balanceController,
-                isSelected: controller.isBalance,
-                onSelect: () {
-                  controller.isBalance.value = !controller.isBalance.value;
-                  if (controller.isBalance.value) {
-                    controller.clearImages();
-                  }
-                  controller.update();
-                },
-                labelText: 'Balance Amount',
-              ),
+              Obx(() {
+                return PaymentMethod(
+                  title: 'Balance',
+                  isSelected: controller.isBalance,
+                  onSelect: () {
+                    controller.isBalance.value = !controller.isBalance.value;
+
+                    controller.update();
+                  },
+                  amountController: controller.balanceController,
+                  labelText: 'Balance Amount',
+                  context: context,
+                  isAmountVisible: controller.isBalance.value,
+                );
+              }),
 
               const SizedBox(height: 30),
 
               // Submit Button
-              submitButton(
-                text: "Add Expense",
-                onPressed: () {
-                  controller.saveSalesInfo();
-                },
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    controller.saveSalesInfo();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Get.theme.primaryColor,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 12),
+                    textStyle: const TextStyle(fontSize: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text("Add Expense",
+                      style: TextStyle(
+                          color: Get.theme.primaryColorLight,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
+                ),
               ),
             ],
           ),
@@ -233,34 +244,27 @@ class ShopSalesScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget cameraButton({required Function onPressed}) {
-    return IconButton(
-      onPressed: () {
-        onPressed();
-      },
-      icon: const Icon(Icons.camera_alt, color: Colors.deepPurple),
-    );
-  }
 }
 
-class PaymentMethodWidget extends StatelessWidget {
+class PaymentMethod extends StatelessWidget {
   final String title;
-  final TextEditingController controller;
   final Rx<bool> isSelected;
   final Function onSelect;
+  final TextEditingController amountController;
   final String labelText;
+  final BuildContext context;
+  final bool isAmountVisible;
 
-  const PaymentMethodWidget({
+  const PaymentMethod({
     super.key,
     required this.title,
-    required this.controller,
     required this.isSelected,
     required this.onSelect,
+    required this.amountController,
     required this.labelText,
+    required this.context,
+    required this.isAmountVisible,
   });
-
-  ShopSalesController get screencontroller => Get.find<ShopSalesController>();
 
   @override
   Widget build(BuildContext context) {
@@ -273,13 +277,11 @@ class PaymentMethodWidget extends StatelessWidget {
               onSelect();
             },
             child: Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
-                color: isSelected.value
-                    ? Colors.green.shade400
-                    : Colors.deepPurple.shade100,
-                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey),
+                color: isSelected.value ? Colors.green : Get.theme.primaryColor,
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Text(
                 title,
@@ -292,46 +294,42 @@ class PaymentMethodWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          isSelected.value
-              ? Flexible(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width * .5,
-                        child: TextField(
-                          controller: controller,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelText: labelText,
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.deepPurple),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.deepPurple),
-                            ),
-                          ),
+          if (isAmountVisible)
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width * .5,
+                    child: TextField(
+                      controller: amountController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: labelText,
+                        border: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          screencontroller.pickMedia();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Icon(Icons.camera_alt,
-                              size: 30, color: Colors.deepPurple),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                )
-              : const SizedBox(),
+                  GestureDetector(
+                    onTap: () {
+                      Get.find<ShopSalesController>().pickMedia();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(Icons.camera_alt, size: 40),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            const SizedBox(),
         ],
       );
     });

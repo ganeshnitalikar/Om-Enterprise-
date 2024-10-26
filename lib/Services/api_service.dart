@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:om/Controllers/Driver/driver_dashboard_controller.dart';
 import 'package:om/Services/shared_preferences_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,7 +49,6 @@ class APIService {
     );
 
     if (response.statusCode == 200) {
-      print("fetched");
       return jsonDecode(response.body)['result'];
     } else {
       throw Exception('Failed');
@@ -102,6 +102,6 @@ class APIService {
 
   void logout() async {
     sharedPrefs.clearPreferences();
-    Get.offAllNamed('/');
+    Get.offAllNamed('/login');
   }
 }

@@ -9,6 +9,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Get.theme;
+    final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
         children: [
@@ -17,9 +19,8 @@ class LoginScreen extends StatelessWidget {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFF6a11cb),
-                  Color(0xFF2575fc),
-                  Color(0xFF69c0ff),
+                  Color(0xFFFFA500), // Orange
+                  Color(0xFF2196F3),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -30,33 +31,32 @@ class LoginScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context)
-                        .viewInsets
-                        .bottom), // Adjust for keyboard
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ), // Adjust for keyboard
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Decorative Icon or Illustration
                     Container(
                       margin: const EdgeInsets.only(bottom: 30),
-                      child: const Icon(
+                      child: Icon(
                         Icons.person_outline_rounded,
                         size: 100,
-                        color: Colors.white,
+                        color: theme.iconTheme.color,
                       ),
                     ),
                     // Login card with glassmorphism effect
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.55,
-                      width: MediaQuery.of(context).size.width * 0.85,
+                      height: mediaQuery.height * 0.55,
+                      width: mediaQuery.width * 0.85,
                       padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
-                        color: Colors.white
-                            .withOpacity(0.15), // semi-transparent white
+                        color: theme.cardColor
+                            .withOpacity(0.15), // Use theme's card color
                         borderRadius: BorderRadius.circular(25),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
+                            color: theme.shadowColor.withOpacity(0.5),
                             blurRadius: 10,
                             spreadRadius: 2,
                             offset: const Offset(0, 5),
@@ -70,12 +70,10 @@ class LoginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Login text
-                          const Text(
+                          Text(
                             'Welcome Back!',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                            style: theme.textTheme.headlineLarge?.copyWith(
+                              color: theme.textTheme.headlineLarge?.color,
                               letterSpacing: 1.2,
                             ),
                           ),
@@ -83,15 +81,14 @@ class LoginScreen extends StatelessWidget {
                           // Username TextField
                           TextField(
                             controller: controller.usernameController,
-                            style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              prefixIcon:
-                                  const Icon(Icons.person, color: Colors.white),
+                              prefixIcon: Icon(Icons.person,
+                                  color: theme.iconTheme.color),
                               labelText: 'Username',
-                              labelStyle:
-                                  const TextStyle(color: Colors.white70),
+                              labelStyle: theme.inputDecorationTheme.labelStyle,
                               filled: true,
-                              fillColor: Colors.white.withOpacity(0.2),
+                              fillColor: theme.inputDecorationTheme.fillColor
+                                  ?.withOpacity(0.2),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide: BorderSide.none,
@@ -105,13 +102,13 @@ class LoginScreen extends StatelessWidget {
                             obscureText: true,
                             style: const TextStyle(color: Colors.white),
                             decoration: InputDecoration(
-                              prefixIcon:
-                                  const Icon(Icons.lock, color: Colors.white),
+                              prefixIcon: Icon(Icons.lock,
+                                  color: theme.iconTheme.color),
                               labelText: 'Password',
-                              labelStyle:
-                                  const TextStyle(color: Colors.white70),
+                              labelStyle: theme.inputDecorationTheme.labelStyle,
                               filled: true,
-                              fillColor: Colors.white.withOpacity(0.2),
+                              fillColor: theme.inputDecorationTheme.fillColor
+                                  ?.withOpacity(0.2),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide: BorderSide.none,
@@ -120,32 +117,34 @@ class LoginScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 30),
                           // Login button with animation and elevation
-                          Obx(() => controller.isLoading.value
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white)
-                              : ElevatedButton(
-                                  onPressed: () {
-                                    controller.login();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor:
-                                        Colors.white.withOpacity(0.3),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 15, horizontal: 80),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
+                          Obx(
+                            () => controller.isLoading.value
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white)
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      controller.login();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: theme.elevatedButtonTheme
+                                              .style?.backgroundColor
+                                              ?.resolve(
+                                                  {MaterialState.pressed}) ??
+                                          Colors.orange,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 80),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      elevation: 10,
                                     ),
-                                    elevation: 10,
-                                  ),
-                                  child: const Text(
-                                    'Login',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                    child: Text(
+                                      'Login',
+                                      style: theme.textTheme.headlineSmall,
                                     ),
                                   ),
-                                )),
+                          )
                         ],
                       ),
                     ),

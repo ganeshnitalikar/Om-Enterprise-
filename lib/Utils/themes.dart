@@ -15,7 +15,8 @@ class Themes {
           letterSpacing: .0,
           fontStyle: FontStyle.normal,
           fontWeight: FontWeight.w400),
-      headlineLarge: GoogleFonts.roboto(         //
+      headlineLarge: GoogleFonts.roboto(
+          //
           fontSize: 32,
           color: Colors.black,
           letterSpacing: .0,
@@ -71,7 +72,7 @@ class Themes {
           fontWeight: FontWeight.w400),
     ),
     colorScheme: const ColorScheme(
-        background: Colors.teal,             //for Appbar use
+        background: Colors.teal, //for Appbar use
         brightness: Brightness.dark,
         primary: Color(0xFF2E3B62),
         onPrimary: Colors.white,
