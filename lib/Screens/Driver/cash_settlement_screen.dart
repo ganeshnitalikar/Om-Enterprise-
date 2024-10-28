@@ -35,28 +35,34 @@ class CashSettlementScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: const Text('Settlement Details',
+                    const Center(
+                      child: Text('Settlement Details',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
                     ),
                     const SizedBox(height: 10),
-                    (controller.isLoading.value)
-                        ? const Center(child: CircularProgressIndicator())
-                        : Column(
-                            children: [
-                              _buildSettlementRow('Sale',
-                                  '${controller.totalSale.value} ₹', theme),
-                              _buildSettlementRow('Cash',
-                                  '${controller.totalCash.value} ₹', theme),
-                              _buildSettlementRow('Online',
-                                  '${controller.totalOnline.value} ₹', theme),
-                              _buildSettlementRow('Balance',
-                                  '${controller.totalBalance.value} ₹', theme),
-                              _buildSettlementRow('Personal Expense',
-                                  '${controller.totalExpense.value} ₹', theme),
-                            ],
-                          ),
+                    Obx(() {
+                      return controller.isLoading.value
+                          ? const Center(child: CircularProgressIndicator())
+                          : Column(
+                              children: [
+                                _buildSettlementRow('Sale',
+                                    '${controller.totalSale.value} ₹', theme),
+                                _buildSettlementRow('Cash',
+                                    '${controller.totalCash.value} ₹', theme),
+                                _buildSettlementRow('Online',
+                                    '${controller.totalOnline.value} ₹', theme),
+                                _buildSettlementRow(
+                                    'Balance',
+                                    '${controller.totalBalance.value} ₹',
+                                    theme),
+                                _buildSettlementRow(
+                                    'Personal Expense',
+                                    '${controller.totalExpense.value} ₹',
+                                    theme),
+                              ],
+                            );
+                    }),
                   ],
                 ),
               ),

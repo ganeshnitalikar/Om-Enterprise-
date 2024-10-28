@@ -17,9 +17,9 @@ class DriverDashboardController extends GetxController {
   final APIService apiService = APIService();
 
   @override
-  void onReady() {
-    super.onReady();
+  void onInit() {
     fetchDriverDetails(sharedPrefs.getEmpId());
+    super.onInit();
   }
 
   void clearValues() {
@@ -54,19 +54,19 @@ class DriverDashboardController extends GetxController {
       await sharedPrefs.setEmployeeName(name.value);
       await sharedPrefs.setAssignId(assignId.value);
       update();
-      print("Route ID: ${routeId.value}");
-      print("Employee Name: ${name.value}");
-      print("Route Name: ${routeName.value}");
-      print("Assign ID: ${assignId.value}");
-      print("Total Material: ${totalMaterial.value}");
-      print("Total Sale: ${totalSale.value}");
-      print("Total Expense: ${totalExpense.value}");
-      print("Current In Vehicle: ${currentInVehicle.value}");
-      print("Total Discount: ${totalDiscount.value}");
-      print(
-          "Total Material Return By Shop: ${totalMaterialReturnByShop.value}");
+      // print("Route ID: ${routeId.value}");
+      // print("Employee Name: ${name.value}");
+      // print("Route Name: ${routeName.value}");
+      // print("Assign ID: ${assignId.value}");
+      // print("Total Material: ${totalMaterial.value}");
+      // print("Total Sale: ${totalSale.value}");
+      // print("Total Expense: ${totalExpense.value}");
+      // print("Current In Vehicle: ${currentInVehicle.value}");
+      // print("Total Discount: ${totalDiscount.value}");
+      // print(
+      //     "Total Material Return By Shop: ${totalMaterialReturnByShop.value}");
     } catch (e) {
-      print("error , $e");
+      // print("error , $e");
       if (routeId.value == 0) {
         Get.snackbar("No Data To Show", "Driver Not Assigned Yet");
       } else {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Driver/shop_sales_controller.dart';
@@ -162,15 +164,17 @@ class ShopSalesScreen extends StatelessWidget {
                   isSelected: controller.isCheque,
                   onSelect: () {
                     controller.isCheque.value = !controller.isCheque.value;
-                    if (controller.isCheque.value) {
-                      // controller.clearImages();
-                    }
                     controller.update();
                   },
                   amountController: controller.chequeAmountController,
                   labelText: 'Cheque Amount',
                   context: context,
                   isAmountVisible: controller.isCheque.value,
+                  onPressed: () {
+                    controller.pickChequeImage();
+                  },
+                  image:
+                      controller.chequeImage.value, // Pass the selected image
                 );
               }),
 
@@ -180,18 +184,20 @@ class ShopSalesScreen extends StatelessWidget {
               Obx(() {
                 return PaymentMethod(
                   title: 'Online',
+                  onPressed: () {
+                    controller.pickOnlineReceipt();
+                  },
                   isSelected: controller.isOnline,
                   onSelect: () {
                     controller.isOnline.value = !controller.isOnline.value;
-                    if (controller.isOnline.value) {
-                      // controller.clearImages();
-                    }
                     controller.update();
                   },
                   amountController: controller.onlineAmountController,
                   labelText: 'Online Amount',
                   context: context,
                   isAmountVisible: controller.isOnline.value,
+                  image:
+                      controller.onlineReceipt.value, // Pass the selected image
                 );
               }),
 
@@ -201,19 +207,22 @@ class ShopSalesScreen extends StatelessWidget {
               Obx(() {
                 return PaymentMethod(
                   title: 'Balance',
+                  onPressed: () {
+                    controller.pickBalanceImage();
+                  },
                   isSelected: controller.isBalance,
                   onSelect: () {
                     controller.isBalance.value = !controller.isBalance.value;
-
                     controller.update();
                   },
                   amountController: controller.balanceController,
                   labelText: 'Balance Amount',
                   context: context,
                   isAmountVisible: controller.isBalance.value,
+                  image:
+                      controller.balanceImage.value, // Pass the selected image
                 );
               }),
-
               const SizedBox(height: 30),
 
               // Submit Button
@@ -253,7 +262,9 @@ class PaymentMethod extends StatelessWidget {
   final TextEditingController amountController;
   final String labelText;
   final BuildContext context;
+  final Function onPressed;
   final bool isAmountVisible;
+  final File? image; // Add the image parameter
 
   const PaymentMethod({
     super.key,
@@ -264,6 +275,8 @@ class PaymentMethod extends StatelessWidget {
     required this.labelText,
     required this.context,
     required this.isAmountVisible,
+    required this.onPressed,
+    this.image, // Initialize the image
   });
 
   @override
@@ -315,21 +328,26 @@ class PaymentMethod extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.find<ShopSalesController>().pickMedia();
+                      onPressed();
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(Icons.camera_alt, size: 40),
-                    ),
+                    child: image == null
+                        ? Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(Icons.camera_alt, size: 40),
+                          )
+                        : Image.file(
+                            image!,
+                            height: 50,
+                            width: 70,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ],
               ),
             )
-          else
-            const SizedBox(),
         ],
       );
     });

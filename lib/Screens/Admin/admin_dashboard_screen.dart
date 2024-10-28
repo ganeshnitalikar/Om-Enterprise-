@@ -8,6 +8,7 @@ import 'package:om/Screens/Admin/assign_vehicle_view.dart';
 import 'package:om/Screens/Admin/route_view.dart';
 import 'package:om/Screens/Admin/shop_screen.dart';
 import 'package:om/Screens/Admin/vehicle_view.dart';
+import 'package:om/Utils/utils.dart';
 
 import '../Driver/login_screen.dart';
 
@@ -16,23 +17,13 @@ class AdminDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     // Check if the user is authenticated
     _checkAuthentication();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Admin Dashboard',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.2,
-          ),
-        ),
-        backgroundColor: Colors.teal.shade800,
-        elevation: 0,
-        centerTitle: true,
-      ),
+      appBar: buildAppBar(theme: theme, title: "Admin DashBoard"),
       drawer: _buildDrawer(),
       body: Obx(() {
         if (_controller.userRole.value.isEmpty) {

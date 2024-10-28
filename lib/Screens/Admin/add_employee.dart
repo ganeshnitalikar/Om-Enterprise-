@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Admin/add_employee_controller.dart';
-import 'package:om/Utils/themes.dart';
+import 'package:om/Utils/utils.dart';
 
 class AddEmployeeScreen extends StatelessWidget {
   final AddEmployeeController controller = Get.put(AddEmployeeController());
@@ -12,14 +12,10 @@ class AddEmployeeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Employee', style: Themes.light.textTheme.displaySmall),
-        backgroundColor:
-            Themes.light.colorScheme.background, // AppBar color customization
+    final theme = Theme.of(context);
 
-        centerTitle: true,
-      ),
+    return Scaffold(
+      appBar: buildAppBar(theme: theme, title: "Admin DashBoard"),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(
@@ -191,6 +187,7 @@ class AddEmployeeScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 controller.saveEmployee(); // Direct call to saveEmployee
+                Get.back();
               },
               child: Text(
                 'Save Employee',

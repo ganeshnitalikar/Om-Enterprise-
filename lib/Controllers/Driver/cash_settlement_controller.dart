@@ -24,19 +24,16 @@ class CashSettlementController extends GetxController {
   var totalAmount = 0.obs;
 
   var settlementData = {}.obs;
-  Rx<bool> isLoading = true.obs;
+  Rx<bool> isLoading = false.obs;
 
   var baseUrl = 'http://139.59.7.147:7071';
 
   @override
   void onInit() async {
-    if (sharedPrefs.getRouteId() != 0) {
-      await fetchSettlementDetails();
-    } else {
-      print('Route ID is not set');
-    }
+    await fetchSettlementDetails();
     super.onInit();
   }
+
 
   // Method to fetch settlement details
   Future<void> fetchSettlementDetails() async {
@@ -57,16 +54,17 @@ class CashSettlementController extends GetxController {
             jsonResponse['result'] != null) {
           settlementData.value = jsonResponse['result'][0];
           // Set values from fetched data
-          totalSale.value = double.tryParse(settlementData['totalsale']) ?? 0;
+          totalSale.value =
+              double.parse(settlementData['totalsale'].replaceAll(',', ''));
           totalExpense.value =
-              double.tryParse(settlementData['totalexpense']) ?? 0;
+              double.parse(settlementData['totalexpense'].replaceAll(',', ''));
           totalBalance.value =
-              double.tryParse(settlementData['totalbalance']) ?? 0;
-          totalCash.value = double.tryParse(settlementData['totalcash']) ?? 0;
+              double.parse(settlementData['totalbalance'].replaceAll(',', ''));
           totalOnline.value =
-              double.tryParse(settlementData['totalonline']) ?? 0;
+              double.parse(settlementData['totalonline'].replaceAll(',', ''));
           totalCheck.value =
-              double.tryParse(settlementData['totalcheck'] ?? '0') ?? 0;
+              double.parse(settlementData['totalcheck'].replaceAll(',', ''));
+          update();
 
           print('Total Sale: ${totalSale.value}');
           print('Total Expense: ${totalExpense.value}');
@@ -74,6 +72,8 @@ class CashSettlementController extends GetxController {
           print('Total Cash: ${totalCash.value}');
           print('Total Online: ${totalOnline.value}');
           print('Total Check: ${totalCheck.value}');
+
+          isLoading.value = false;
         } else {
           Get.snackbar('Error', 'Failed to fetch data.');
         }

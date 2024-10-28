@@ -3,31 +3,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Admin/assign_vehicle_controller.dart';
-import 'package:om/Utils/themes.dart';
+import 'package:om/Utils/utils.dart';
 
 class AssignVehicleScreen extends StatelessWidget {
   final AssignVehicleController controller = Get.put(AssignVehicleController());
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Assign Vehicle', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Themes.light.colorScheme.background, // Custom AppBar color
-        centerTitle: true,
-
-      ),
+      appBar: buildAppBar(theme: theme, title: "Assign Vehicle"),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Section Header: Assignment Information
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
+            const Padding(
+              padding:EdgeInsets.symmetric(vertical: 10.0),
               child: Text(
                 'Assignment Information',
-                style: Themes.light.textTheme.headlineSmall,
+                style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
 

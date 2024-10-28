@@ -134,66 +134,54 @@ class DriverDashboard extends StatelessWidget {
             },
             theme: theme,
           ),
-          controller.routeId.value != 0
-              ? _buildDrawerItem(
-                  icon: Icons.store,
-                  text: 'Shop Sales',
-                  onTap: () {
-                    Get.toNamed('/driverShopSales');
-                  },
-                  theme: theme,
-                )
-              : const SizedBox.shrink(),
-          controller.routeId.value != 0
-              ? _buildDrawerItem(
-                  icon: Icons.store,
-                  text: 'Shops On Route',
-                  onTap: () {
-                    Get.toNamed('/driverShopOnRoute');
-                  },
-                  theme: theme,
-                )
-              : const SizedBox.shrink(),
-          controller.routeId.value != 0
-              ? _buildDrawerItem(
-                  icon: Icons.sms_failed,
-                  text: 'Expense Module',
-                  onTap: () {
-                    Get.toNamed('/driverExpense');
-                  },
-                  theme: theme,
-                )
-              : const SizedBox.shrink(),
-          controller.routeId.value != 0
-              ? _buildDrawerItem(
-                  icon: Icons.report,
-                  text: 'Report',
-                  onTap: () {
-                    Get.toNamed('/driverReport');
-                  },
-                  theme: theme,
-                )
-              : const SizedBox.shrink(),
-          controller.routeId.value != 0
-              ? _buildDrawerItem(
-                  icon: Icons.money,
-                  text: 'Cash Settlement',
-                  onTap: () {
-                    Get.toNamed('/driverCashSettlement');
-                  },
-                  theme: theme,
-                )
-              : const SizedBox.shrink(),
-          controller.routeId.value != 0
-              ? _buildDrawerItem(
-                  icon: Icons.warning,
-                  text: 'Expiry Material',
-                  onTap: () {
-                    Get.toNamed('/driverExpiryMaterial');
-                  },
-                  theme: theme,
-                )
-              : const SizedBox.shrink(),
+          _buildDrawerItem(
+            icon: Icons.store,
+            text: 'Shop Sales',
+            onTap: () {
+              Get.toNamed('/driverShopSales');
+            },
+            theme: theme,
+          ),
+          _buildDrawerItem(
+            icon: Icons.store,
+            text: 'Shops On Route',
+            onTap: () {
+              Get.toNamed('/driverShopOnRoute');
+            },
+            theme: theme,
+          ),
+          _buildDrawerItem(
+            icon: Icons.sms_failed,
+            text: 'Personal Expense',
+            onTap: () {
+              Get.toNamed('/driverExpense');
+            },
+            theme: theme,
+          ),
+          _buildDrawerItem(
+            icon: Icons.report,
+            text: 'Report',
+            onTap: () {
+              Get.toNamed('/driverReport');
+            },
+            theme: theme,
+          ),
+          _buildDrawerItem(
+            icon: Icons.money,
+            text: 'Cash Settlement',
+            onTap: () {
+              Get.toNamed('/driverCashSettlement');
+            },
+            theme: theme,
+          ),
+          _buildDrawerItem(
+            icon: Icons.warning,
+            text: 'Expiry Material',
+            onTap: () {
+              Get.toNamed('/driverExpiryMaterial');
+            },
+            theme: theme,
+          ),
           _buildDrawerItem(
             icon: Icons.logout,
             text: 'Logout',
@@ -232,7 +220,10 @@ class DriverDashboard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             DashboardCard(
-                title: 'Total Sale', value: controller.totalSale.value),
+              title: 'Total Sale',
+              value: controller.totalSale.value,
+              isSale: true,
+            ),
             DashboardCard(
                 title: "Total Material", value: controller.totalMaterial.value),
           ],
@@ -264,8 +255,13 @@ class DriverDashboard extends StatelessWidget {
 class DashboardCard extends StatelessWidget {
   final String title;
   final double value;
+  final bool isSale;
 
-  const DashboardCard({super.key, required this.title, required this.value});
+  const DashboardCard(
+      {super.key,
+      required this.title,
+      required this.value,
+      this.isSale = false});
 
   @override
   Widget build(BuildContext context) {
@@ -275,37 +271,74 @@ class DashboardCard extends StatelessWidget {
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.symmetric(vertical: 12),
-      child: Container(
-        padding: const EdgeInsets.only(top: 10, left: 10),
-        height: MediaQuery.of(context).size.height / 6.7,
-        width: MediaQuery.of(context).size.width / 2.5,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: theme.shadowColor.withOpacity(0.5),
-              blurRadius: 8,
-              spreadRadius: 1,
-              offset: const Offset(0, 5),
+      child: isSale
+          ? InkWell(
+              onTap: () {
+                Get.toNamed('/driverShopOnRoute');
+              },
+              child: Container(
+                padding: const EdgeInsets.only(top: 10, left: 10),
+                height: MediaQuery.of(context).size.height / 6.7,
+                width: MediaQuery.of(context).size.width / 2.5,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.shadowColor.withOpacity(0.5),
+                      blurRadius: 8,
+                      spreadRadius: 1,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(12),
+                  color: theme.cardTheme.color,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.primary, fontSize: 22),
+                    ),
+                    const SizedBox(height: 10),
+                    Text('$value',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                            color: theme.colorScheme.inverseSurface)),
+                  ],
+                ),
+              ),
+            )
+          : Container(
+              padding: const EdgeInsets.only(top: 10, left: 10),
+              height: MediaQuery.of(context).size.height / 6.7,
+              width: MediaQuery.of(context).size.width / 2.5,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.shadowColor.withOpacity(0.5),
+                    blurRadius: 8,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(12),
+                color: theme.cardTheme.color,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    title,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.primary, fontSize: 22),
+                  ),
+                  const SizedBox(height: 10),
+                  Text('$value',
+                      style: theme.textTheme.titleLarge
+                          ?.copyWith(color: theme.colorScheme.inverseSurface)),
+                ],
+              ),
             ),
-          ],
-          borderRadius: BorderRadius.circular(12),
-          color: theme.cardTheme.color,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: theme.textTheme.bodyLarge
-                  ?.copyWith(color: theme.colorScheme.primary, fontSize: 22),
-            ),
-            const SizedBox(height: 10),
-            Text('$value',
-                style: theme.textTheme.titleLarge
-                    ?.copyWith(color: theme.colorScheme.inverseSurface)),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -58,7 +58,8 @@ class ShopSalesController extends GetxController {
       searchResults
           .addAll(await APIService().performSearch(routeId, searchString));
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch shops: $e');
+      Get.snackbar('Error', 'Data Not Found',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 
@@ -129,21 +130,45 @@ class ShopSalesController extends GetxController {
   //   }
   // }
 
-  Future<void> pickMedia() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      File image = File(pickedFile.path);
-
-      if (isCheque.value) {
+  Future<void> pickChequeImage() async {
+    try {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        File image = File(pickedFile.path);
         chequeImage.value = image;
-      } else if (isBalance.value) {
-        balanceImage.value = image;
-      } else if (isOnline.value) {
-        onlineReceipt.value = image;
+        update(); // Call update to notify listeners
       }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
 
-      update(); // Call update to notify listeners
+  Future<void> pickBalanceImage() async {
+    try {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        File image = File(pickedFile.path);
+        balanceImage.value = image;
+        update(); // Call update to notify listeners
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
+  Future<void> pickOnlineReceipt() async {
+    try {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        File image = File(pickedFile.path);
+        onlineReceipt.value = image;
+        update(); // Call update to notify listeners
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
     }
   }
 

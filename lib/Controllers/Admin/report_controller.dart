@@ -1,61 +1,92 @@
 import 'package:get/get.dart';
+import 'package:om/Api%20Service/Admin/Api.dart';
 
 class ReportController extends GetxController {
-  // List of shops fetched from the API
-  var shops = [].obs;
+  final api = ApiClass();
 
-  // List of employees fetched from the API
-  var employees = [].obs;
-
-  // Selected values for dropdowns
-  var selectedShop = ''.obs; // Holds the selected shop ID
-  var selectedEmployee = ''.obs; // Holds the selected employee ID
-  var selectedStatus = ''.obs; // Holds the selected status
-
-  // Selected report type (like 'Balance Report')
   var selectedReport = ''.obs;
+  var fromDate = ''.obs;
+  var toDate = ''.obs;
+  var shopId = 0.obs;
+  var driverId = 0.obs;
 
-  var fromDate = ''.obs; // Define fromDate
-  var toDate = ''.obs; // Define toDate
-
-  // Dummy balance report data (replace with real data fetched from the API)
-  var balanceReport = [].obs;
+  var reportData = <Map<String, dynamic>>[].obs;
+  var shopDropdownItems = <DropdownItem>[].obs;
+  var employeeDropdownItems = <DropdownItem>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchShops(); // Fetch shops on initialization
-    fetchEmployees(); // Fetch employees on initialization
+    fetchDropdownData("employee"); // Fetch employee data for the dropdown initially
   }
 
-  // Fetch shops data from API (replace with actual API call)
-  void fetchShops() async {
-    try {
-      // Simulate API call and response
-      var response = [
-        {'id': 1, 'name': 'Shop 1'},
-        {'id': 2, 'name': 'Shop 2'},
-        {'id': 3, 'name': 'Shop 3'}
-      ];
-      shops.value = response;
-    } catch (e) {
-      print('Error fetching shops: $e');
-    }
-  }
+Future<void> fetchReports() async {
+  try {
+    String fromDateString = fromDate.value; 
+    String toDateString = toDate.value;     
 
-  // Fetch employees data from API (replace with actual API call)
-  void fetchEmployees() async {
+    // Set the parameters for the API request
+    var shopsIdValue = shopId.value; 
+    int driverIdValue = driverId.value; 
+    int pageValue = 1; // Set your desired page number
+    int sizeValue = 10; // Set your desired page size
+
+    // Debugging output
+    print('Fetching balance report with parameters: '
+          'fromDate: $fromDateString, toDate: $toDateString, '
+          'shopsId: $shopsIdValue, driverId: $driverIdValue, '
+          'isCollect: true, page: $pageValue, size: $sizeValue');
+
+    // Call your API with the updated method signature
+    var response = await api.fetchBalanceReport(
+      fromDate: fromDateString,
+      toDate: toDateString,
+      shopsId: shopsIdValue,
+      driverId: driverIdValue,
+      isCollect: false,
+      page: pageValue,
+      size: sizeValue,
+    );
+
+    // Handle the response
+    if (response != null && response['data'] != null) {
+      reportData.value = List<Map<String, dynamic>>.from(response['data']);
+      Get.snackbar("Success","Data fetched Successfully!!");
+    } else {
+      Get.snackbar("Error", "No data received from the report API.");
+    }
+  } catch (e) {
+    Get.snackbar("Error", "Failed to fetch balance report: $e");
+  }
+}
+
+
+
+
+  Future<void> fetchDropdownData(String type) async {
     try {
-      // Simulate API call and response
-      var response = [
-        {'id': 1, 'name': 'Employee 1'},
-        {'id': 2, 'name': 'Employee 2'},
-        {'id': 3, 'name': 'Employee 3'}
-      ];
-      employees.value = response;
+      var data = await api.fetchEmployees();
+      if (type == "shop") {
+        shopDropdownItems.value = data.map((item) => DropdownItem.fromJson(item)).toList();
+      } else if (type == "employee") {
+        employeeDropdownItems.value = data.map((item) => DropdownItem.fromJson(item)).toList();
+      }
     } catch (e) {
-      print('Error fetching employees: $e');
+      Get.snackbar("Error", "Failed to load $type dropdown data: $e");
     }
   }
-  
+}
+
+class DropdownItem {
+  final int id;
+  final String label;
+
+  DropdownItem({required this.id, required this.label});
+
+  factory DropdownItem.fromJson(Map<String, dynamic> json) {
+    return DropdownItem(
+      id: json['id'],
+      label: json['label'],
+    );
+  }
 }

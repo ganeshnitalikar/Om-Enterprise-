@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:om/Utils/themes.dart';
+import 'package:om/Utils/utils.dart';
 import '../../Controllers/Admin/route_controller.dart';
 
 class RouteView extends StatelessWidget {
@@ -8,13 +8,10 @@ class RouteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(
-          title: Text(
-            'Route Management',
-            style: Themes.light.textTheme.headlineSmall,
-          ),
-          backgroundColor: Themes.light.colorScheme.background),
+      appBar: buildAppBar(theme: theme, title: "Route Management"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -81,6 +78,7 @@ class RouteView extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   _controller.saveRoute();
+                  Get.back();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
