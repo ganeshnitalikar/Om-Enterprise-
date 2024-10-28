@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Admin/shop_controller.dart';
+import 'package:om/Utils/utils.dart';
 
 class ShopScreen extends StatelessWidget {
   final ShopController controller = Get.put(ShopController()); // Initialize the controller
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final Color primaryColor = Colors.blueAccent;
     final Color secondaryColor = Colors.white;
     final double borderRadius = 12.0;
     final double elevation = 5.0;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Shop Management'),
-        backgroundColor: primaryColor,
-      ),
+      appBar: buildAppBar(theme: theme, title: "Shop Management"),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Card(
@@ -117,7 +117,18 @@ class ShopScreen extends StatelessWidget {
                     SizedBox(height: 30),
                     // Save Button
                     ElevatedButton(
-                      onPressed: controller.saveShop,
+                      onPressed: () async {
+                        await controller.saveShop();
+                        Get.back();
+                        Get.snackbar(
+                          "Success",
+                          "Shop saved successfully!",
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.greenAccent,
+                          colorText: Colors.white,
+                        );
+                        
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primaryColor,
                         padding: EdgeInsets.symmetric(vertical: 15),

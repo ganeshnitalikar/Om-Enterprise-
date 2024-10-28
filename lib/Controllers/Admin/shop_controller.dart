@@ -17,6 +17,14 @@ class ShopController extends GetxController {
     fetchRoutes();
   }
 
+   @override
+  void onClose() {
+    // Dispose of the TextEditingControllers when the controller is closed
+    shopNameController.dispose();
+    shopContactController.dispose();
+    super.onClose();
+  }
+
   Future<void> fetchRoutes() async {
     try {
       routes = await api.fetchRoutes();

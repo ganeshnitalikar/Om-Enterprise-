@@ -203,19 +203,46 @@ Future<List<Map<String, dynamic>>> fetchEmployeesforAdmin() async {
     }
   }
 
-  Future<List<dynamic>> fetchBalanceReport() async {
-    try {
-      final response = await _dio.get('your-api-endpoint/balance-report');
-      if (response.statusCode == 200) {
-        return response.data; // Assuming the balance report is structured correctly
-      } else {
-        throw Exception('Failed to load balance report: ${response.data['message']}');
-      }
-    } catch (e) {
-      print('Error fetching balance report: $e');
-      return [];
+   Future<Map<String, dynamic>?> fetchBalanceReport({
+  required String fromDate,
+  required String toDate,
+  required int shopsId,
+  required int driverId,
+  required bool isCollect,
+  required int page,
+  required int size,
+}) async {
+  // Create the request data from the provided parameters
+  final requestData = {
+    "fromDate": fromDate,
+    "toDate": toDate,
+    "shopsId": shopsId,
+    "driverId": driverId,
+    "isCollect": isCollect,
+    "page": page,
+    "size": size,
+  };
+
+  try {
+    // Make the API call
+    final response = await Dio().post(
+      "http://139.59.7.147:7071/reports/getBalanceReport",
+      data: requestData,
+    );
+
+    // Check the response status code
+    if (response.statusCode == 200) {
+      return response.data; // Return the data if the response is successful
+    } else {
+      print('Failed to fetch report: ${response.statusCode}');
+      return null; // Handle the error by returning null
     }
+  } catch (e) {
+    print('Error fetching balance report: $e');
+    return null; // Handle the error by returning null
   }
+}
+
 
  
  Future<void> saveRoute(RouteModel route) async {
@@ -256,4 +283,6 @@ try {
   throw e; // Re-throw for further handling
 }
   }
+
+  
 }

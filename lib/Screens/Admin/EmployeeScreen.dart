@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:om/Controllers/Admin/employee_controller.dart';
 import 'package:om/Screens/Admin/add_employee.dart';
-import 'package:om/Utils/themes.dart';
+import 'package:om/Services/api_service.dart';
 
 class EmployeeScreen extends StatelessWidget {
   final EmployeeController employeeController = Get.put(EmployeeController());
 
-  void _showUpdateBottomSheet(BuildContext context, Map<String, dynamic> employee) {
+  void _showUpdateBottomSheet(
+      BuildContext context, Map<String, dynamic> employee) {
     final _formKey = GlobalKey<FormState>();
     final controllers = {
       'Employee Name': TextEditingController(text: employee['Employee Name']),
@@ -16,46 +18,62 @@ class EmployeeScreen extends StatelessWidget {
     };
 
     Get.bottomSheet(
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 10),
-            Text('Update Employee', style: Themes.light.textTheme.headlineMedium),
-            SizedBox(height: 20),
-            Form(
-              key: _formKey,
+      Theme(
+        data: Theme.of(context).copyWith(canvasColor: Colors.orange),
+        child: Material(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+          child: Container(
+            color: const Color.fromARGB(255, 196, 216, 233),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  ...controllers.entries.map((entry) => _buildTextField(entry.value, entry.key)).toList(),
+                  SizedBox(height: 10),
+                  Text('Update Employee',
+                      style: TextStyle(color: Colors.black)),
                   SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        employeeController.updateEmployee(
-                          employee['Id'],
-                          controllers['Employee Name']!.text,
-                          controllers['Role']!.text,
-                          controllers['Contact No']!.text,
-                        );
-                        Get.back();
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 45),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        ...controllers.entries
+                            .map((entry) =>
+                                _buildTextField(entry.value, entry.key))
+                            .toList(),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              employeeController.updateEmployee(
+                                employee['Id'],
+                                controllers['Employee Name']!.text,
+                                controllers['Role']!.text,
+                                controllers['Contact No']!.text,
+                              );
+                              Get.back();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(double.infinity, 45),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                          ),
+                          child: Text('Update', style: TextStyle(fontSize: 16)),
+                        ),
+                      ],
                     ),
-                    child: Text('Update', style: TextStyle(fontSize: 16)),
                   ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
     );
   }
 
@@ -138,16 +156,83 @@ class EmployeeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Employees', style: Themes.light.textTheme.headlineSmall),
-        backgroundColor: Themes.light.colorScheme.background,
-        actions: [
+        title: Text(
+          'Employees',
+          style: GoogleFonts.roboto(
+            fontSize: 20,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 117, 183, 241),
+        actions: [  
+       
           IconButton(
             icon: Icon(Icons.add),
             onPressed: _navigateToAddEmployee,
             tooltip: 'Add Employee',
           ),
+           const SizedBox(
+            width: 10,
+          ),
+         IconButton(
+        icon: Icon(
+          Icons.logout,
+          color: theme.iconTheme.color,
+        ),
+        onPressed: () {
+          Get.dialog(Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Are you sure you want to logout?",
+                    style: theme.textTheme.bodyLarge!.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          APIService().logout();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.error,
+                        ),
+                        child: Text("Yes",
+                            style: theme.textTheme.bodyLarge!
+                                .copyWith(color: theme.canvasColor)),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        style: theme.elevatedButtonTheme.style,
+                        child: Text(
+                          "No",
+                          style: theme.textTheme.bodyLarge!
+                              .copyWith(color: theme.primaryColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ));
+        },
+      ),
         ],
       ),
       body: Container(
@@ -163,14 +248,17 @@ class EmployeeScreen extends StatelessWidget {
           if (employeeController.isLoading.value) {
             return Center(child: CircularProgressIndicator());
           } else if (employeeController.errorMessage.isNotEmpty) {
-            return Center(child: Text(employeeController.errorMessage.value, style: TextStyle(color: Colors.red)));
+            return Center(
+                child: Text(employeeController.errorMessage.value,
+                    style: TextStyle(color: Colors.red)));
           } else if (employeeController.employees.isEmpty) {
             return Center(child: Text("No employees found."));
           } else {
             return ListView.builder(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               itemCount: employeeController.employees.length,
-              itemBuilder: (context, index) => _buildEmployeeCard(employeeController.employees[index]),
+              itemBuilder: (context, index) =>
+                  _buildEmployeeCard(employeeController.employees[index]),
             );
           }
         }),

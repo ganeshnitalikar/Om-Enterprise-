@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
         "omenterprises"
-    ]
+    ],
+    "cmake.ignoreCMakeListsMissing": true
 }

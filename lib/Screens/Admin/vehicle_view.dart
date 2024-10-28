@@ -4,18 +4,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:om/Controllers/Admin/VehicleController.dart';
-import 'package:om/Utils/themes.dart';
+import 'package:om/Utils/utils.dart';
 
 class VehicleView extends StatelessWidget {
   final VehicleController _controller = Get.put(VehicleController());
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Vehicle Management',style: Themes.light.textTheme.headlineSmall,),
-        backgroundColor: Themes.light.colorScheme.background
-      ),
+      appBar: buildAppBar(theme: theme, title: "Vehicle Management"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

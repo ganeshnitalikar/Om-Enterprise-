@@ -5,10 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Themes {
   static final light = ThemeData.light().copyWith(
-    scaffoldBackgroundColor: const Color.fromARGB(255, 244, 173, 131),
+    scaffoldBackgroundColor: Colors.blue[100],
     primaryColor: Colors.blue, // Primary color
-    colorScheme: ColorScheme.light(
-      primary: Colors.blue,
+    colorScheme: const ColorScheme.light(
+      primary:  Color.fromARGB(255, 12, 12, 12),
       secondary: Colors.orange,
       background: Colors.white,
       surface: Colors.white,
@@ -20,7 +20,7 @@ class Themes {
       onError: Colors.white,
     ),
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.blue, // AppBar color
+      backgroundColor: const Color.fromARGB(255, 117, 183, 241), // AppBar color
       titleTextStyle: GoogleFonts.roboto(
         fontSize: 20,
         color: Colors.black,
@@ -28,13 +28,13 @@ class Themes {
       ),
       iconTheme: const IconThemeData(color: Colors.black),
     ),
-    buttonTheme: ButtonThemeData(
-      buttonColor: Colors.orange, // Button background color
-      textTheme: ButtonTextTheme.primary,
+    buttonTheme: const ButtonThemeData(
+      buttonColor:  Color.fromARGB(255, 231, 145, 84), // Button background color
+      textTheme: ButtonTextTheme.primary
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.orange,
+        backgroundColor: const Color.fromARGB(255, 224, 166, 85),
         disabledBackgroundColor: Colors.white,
         textStyle: GoogleFonts.roboto(fontSize: 18),
       ),
@@ -73,7 +73,7 @@ class Themes {
     ),
     drawerTheme: DrawerThemeData(
       backgroundColor:
-          const Color.fromARGB(255, 234, 109, 37), // Drawer background
+          Colors.blue[100], // Drawer background
       elevation: 10,
     ),
   );
@@ -81,7 +81,7 @@ class Themes {
   static final dark = ThemeData.dark().copyWith(
     scaffoldBackgroundColor: Colors.black,
     primaryColor: Colors.blueGrey, // Primary color
-    colorScheme: ColorScheme.dark(
+    colorScheme: const ColorScheme.dark(
       primary: Colors.blueGrey,
       secondary: Colors.orange,
       background: Colors.black,
