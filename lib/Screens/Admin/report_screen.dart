@@ -25,7 +25,7 @@ class ReportScreen extends StatelessWidget {
   }
 
   Widget _buildButtonColumn() {
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         _buildReportButton('Balance Report'),

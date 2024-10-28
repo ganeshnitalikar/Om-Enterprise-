@@ -8,6 +8,8 @@ import 'package:om/Utils/themes.dart';
 class AddEmployeeScreen extends StatelessWidget {
   final AddEmployeeController controller = Get.put(AddEmployeeController());
 
+  AddEmployeeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
